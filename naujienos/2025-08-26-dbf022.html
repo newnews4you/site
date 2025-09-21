@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Parengta reforma, pagal migracijos planus numatanti išsiųsti 600 000 žmonių</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Parengta reforma, pagal migracijos planus numatanti išsiųsti 600 000 žmonių" />
+  <meta property="og:title" content="Parengta reforma, pagal migracijos planus numatanti išsiųsti 600 000 žmonių">
+  <meta property="og:description" content="Parengta reforma, pagal migracijos planus numatanti išsiųsti 600 000 žmonių">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://images.pexels.com/photos/11654004/pexels-photo-11654004.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940">
+  <meta name="theme-color" content="#0b1220">
+
+  <!-- Tailwind 2 -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+  <style>
+    body{background:#0b1220;color:#e5e7eb}
+    .prose-article{font-size:1.0625rem;line-height:1.85}
+    @media (min-width:640px){ .prose-article{font-size:1.125rem} }
+    .prose-article p{margin-bottom:1.15rem}
+    .prose-article b{color:#f3f4f6}
+    .prose-article h2{font-size:clamp(1.125rem,2.6vw,1.5rem);line-height:1.3;margin:1.75rem 0 .9rem;font-weight:800}
+    .prose-article a{color:#93c5fd;border-bottom:1px dashed rgba(147,197,253,.5)}
+    .prose-article a:hover{color:#bfdbfe;border-bottom-color:#bfdbfe}
+    .prose-article blockquote{border-left:4px solid #1f2937;padding-left:.9rem;color:#d1d5db;opacity:.9}
+
+    :root{ --pad: 1rem; }
+    .bleed{ margin-left: calc(-1 * var(--pad)); margin-right: calc(-1 * var(--pad)); }
+
+    #progressBar{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,#60a5fa,#22d3ee);z-index:50;transition:width .15s ease-out}
+
+    /* Susiję – bendri stiliai */
+    .rel-card{background:#0f172a;border:1px solid #1f2937;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;height:100%}
+    .rel-img{aspect-ratio:16/9;background:#0b1220;object-fit:cover;width:100%}
+    .rel-body{padding:.75rem .9rem 1rem}
+    .rel-title{font-weight:800;line-height:1.25}
+    .rel-meta{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.4rem;font-size:.82rem;color:#9ca3af}
+    .rel-badge{background:#111827;border:1px solid #1f2937;border-radius:999px;padding:.15rem .5rem}
+
+    /* Mobile karuselė */
+    .rel-row{display:grid;grid-auto-flow:column;grid-auto-columns:75%;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:.25rem}
+    .rel-row > a{scroll-snap-align:start}
+    @media (min-width:768px){ .rel-row{grid-auto-columns:45%} }
+    @media (min-width:1024px){ .rel-row{display:none} }
+
+    /* Desktop aside (dešinėje) */
+    .rel-aside{position:sticky;top:84px}
+    .rel-list .rel-card{transition:transform .08s ease}
+    .rel-list .rel-card:hover{transform:translateY(-2px)}
+    .rel-list .rel-card + .rel-card{margin-top:12px}
+
+    /* Skeletons */
+    .rel-skel{background:#0f172a;border:1px solid #1f2937;border-radius:14px;overflow:hidden}
+    .rel-skel .ph{height:140px;background:linear-gradient(90deg,#111827 25%,#172033 37%,#111827 63%);animation:sh 1.2s infinite}
+    .rel-skel .ln{height:12px;background:#111827;margin:10px;border-radius:6px}
+    @keyframes sh{0%{background-position:-200px 0}100%{background-position:calc(200px + 100%) 0}}
+
+    .share-bar{position:sticky;bottom:0;z-index:40}
+    @media (min-width:1024px){ .share-bar{display:none} }
+
+    @media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important} }
+
+    @media print{
+      .no-print{display:none!important}
+      body{background:#fff!important;color:#000!important}
+      a{color:#000!important}
+    }
+  </style>
+</head>
+<body>
+  <!-- Progreso juosta -->
+  <div id="progressBar" class="no-print"></div>
+
+  <!-- Viršutinė juosta -->
+  <header class="no-print sticky top-0 z-30 backdrop-filter backdrop-blur bg-gray-900 bg-opacity-70 border-b border-gray-800">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="../zemelepai/region_map.html"
+         class="inline-flex items-center space-x-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded-md">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        <span>Grįžti</span>
+      </a>
+
+      <div class="flex items-center gap-2 text-xs sm:text-sm">
+        <span class="inline-flex items-center px-2 py-1 rounded-full bg-blue-500 text-black font-bold">Politika</span>
+        <span class="inline-flex items-center px-2 py-1 rounded-full bg-gray-800 text-gray-300 border border-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor"><path d="M6 2a1 1 0 000 2h8a1 1 0 100-2H6z"/><path fill-rule="evenodd" d="M4 5a2 2 0 00-2 2v8a3 3 0 003 3h10a3 3 0 003-3V7a2 2 0 00-2-2H4zm6 3a1 1 0 011 1v3.586l1.293 1.293a1 1 0 01-1.414 1.414l-1.586-1.586A1 1 0 018 13V9a1 1 0 011-1h1z" clip-rule="evenodd"/></svg>
+          <time datetime="2025-08-26">2025-08-26</time>
+        </span>
+        <span class="inline-flex items-center px-2 py-1 rounded-full bg-gray-800 text-gray-300 border border-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor"><path d="M2 5a2 2 0 012-2h9.5A2.5 2.5 0 0116 5.5V16a2 2 0 01-2 2H4a2 2 0 01-2-2V5z"/><path d="M16 8h2v9a2 2 0 01-2 2V8z"/></svg>
+          <span id="readingTime">~3 min</span>
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Maketas: straipsnis + dešinysis aside su „Susiję“ (tik ≥ lg) -->
+  <div class="max-w-6xl mx-auto px-4">
+    <!-- Pavadinimas + hero -->
+    <section class="mt-5 sm:mt-8">
+      <h1 id="pageTitle" class="text-[clamp(1.7rem,5vw,2.75rem)] font-extrabold tracking-tight mb-3 sm:mb-4">
+        Parengta reforma, pagal migracijos planus numatanti išsiųsti 600 000 žmonių
+      </h1>
+
+      
+      <figure class="relative mb-2 sm:mb-6 bleed">
+        <img
+          src="https://images.pexels.com/photos/11654004/pexels-photo-11654004.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+          alt="Straipsnio iliustracija"
+          class="w-full rounded-2xl shadow-2xl object-cover"
+          loading="eager" decoding="async">
+        <figcaption class="text-xs text-gray-400 mt-2 px-1">Iliustracinė nuotrauka</figcaption>
+      </figure>
+    
+    </section>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <!-- STRAIPSNIS -->
+      <main class="lg:col-span-8">
+        <article id="articleContent" class="prose-article text-gray-200">
+          <p class='mb-6'>Reform UK pateikė migracijos strategiją, kuria per penkerius metus būtų siekiama išsiųsti apie pusę milijono nepageidaujamų migrantų. Plane numatytas atsisakymas Europos žmogaus teisių teismo jurisdikcijos ir 1951 m. pabėgėlių konvencijos, taip pat beveik dviejų milijardų svarų vertės sulaikymo infrastruktūra karinėse bazėse.</p><p class='mb-6'><b>Milžiniškas deportacijų planas – 500 tūkst. per penkerius metus</b></p><p class='mb-6'>Partijos lyderis Nigelas Farage’as teigia, kad kasmet reikėtų išsiųsti po 100 tūkst. žmonių, kad per visą kadenciją būtų pasiektas pusės milijono tikslas. Skaičiai paremti Vidaus reikalų ministerijos preliminariais duomenimis apie nelegaliai ar be galiojančių dokumentų šalyje esančius asmenis. Strategijoje akcentuojama, kad tikslas apima ne tik nelegalius migrantus, bet ir tuos, kurių prieglobsčio prašymai atmesti, tačiau kurie liko šalyje. Ekspertai abejoja, ar tokie srautai būtų įmanomi be masinių teisminių ginčų ir tarptautinių sankcijų.</p><p class='mb-6'><b>Teisinės sienos griovimas – EŽTT ir 1951 m. konvencijos atsisakymas</b></p><p class='mb-6'>Reform UK siūlo parlamentui priimti įstatymą, kuris suspenduotų Europos žmogaus teisių teismo sprendimus migracijos srityje, ir atsisakyti 1951 m. Ženevos konvencijos nuostatų. Pasak partijos, tai leistų pačiai šaliai spręsti, kas laikoma „tikru pabėgėliu“, o ne atsižvelgti į JT ar Europos teisės institucijų vertinimus. Teisininkai perspėja, kad toks žingsnis sukeltų konfliktą su tarptautine teise ir pakenktų šalies reputacijai, nes JK taptų pirmąja didžiąja valstybe, atsisakančia konvencijos nuo jos įsigaliojimo.</p><p class='mb-6'><b>Karinės bazės tampa sulaikymo stovyklomis – 24 tūkst. vietų ir £2 mlrd. spaudimui</b></p><p class='mb-6'>Plane numatyta pertvarkyti keturias karines oro pajėgų bazes Pietų Anglijoje ir Velse į laikinus sulaikymo centrus, kuriuose vienu metu galėtų būti laikoma apie 24 tūkst. žmonių. Šiems centrams įrengti reikėtų maždaug 2 mlrd. svarų, kurie būtų skirti pastatams, apsaugos personalui, medicininei priežiūrai bei greitajai teismų sistemai. Konkrečiai minimos bazės Brize Norton, Lyneham ir Valley, kurios esą turi pakankamai infrastruktūros moduliniams nameliams. Strategijoje taip pat numatyti „trečiųjų šalių susitarimai“, pagal kuriuos JK siūlytų išmokas ar kitą paramą valstybėms, priimančioms deportuotus asmenis, – schema panaši į anksčiau bandytą „Ruandos planą“, tik gerokai platesnė.</p><p class='mb-6'><b>Politinės audros ir rekordinės migracijos bangos – 28 288 jau šiemet</b></p><p class='mb-6'>Nors Reform UK pristato planą kaip būsimą projektą, dabartiniai skaičiai rodo, kad migracija per Lamanšo sąsiaurį šiemet jau pasiekė rekordines aukštumas. Nuo sausio iki gegužės pabaigos Didžiosios Britanijos pakrantės apsauga sulaikė 28 288 migrantus, plaukiančius mažais pripučiamais laivais – beveik 30 proc. daugiau nei per tą patį laikotarpį pernai.</p>
+        </article>
+
+        <!-- Dalinimasis (desktop/tablet) -->
+        <div class="hidden sm:flex flex-wrap items-center gap-2 mt-10 no-print">
+          <button id="shareBtn" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-black rounded-md font-semibold">Dalintis</button>
+          <button id="copyBtn" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-md border border-gray-700">Nukopijuoti nuorodą</button>
+          <a id="twBtn" target="_blank" rel="noopener" class="px-4 py-2 bg-blue-400 hover:bg-blue-500 text-black rounded-md font-semibold" href="#">X (Twitter)</a>
+          <a id="liBtn" target="_blank" rel="noopener" class="px-4 py-2 bg-blue-300 hover:bg-blue-400 text-black rounded-md font-semibold" href="#">LinkedIn</a>
+        </div>
+
+        <!-- MOBILE: Susiję karuselė -->
+        <section class="lg:hidden mt-10">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-xl font-extrabold">Susiję straipsniai</h3>
+            <span class="text-xs text-gray-400">Perbraukite →</span>
+          </div>
+          <!-- Skeleton (mobile) -->
+          <div id="relSkeletonMobile" class="grid grid-cols-1 gap-3 mb-2">
+            <div class="rel-skel"><div class="ph"></div><div class="ln" style="width:80%"></div><div class="ln" style="width:60%"></div></div>
+          </div>
+          <div id="relRow" class="rel-row"></div>
+          <p id="relEmptyMobile" class="text-gray-400 text-sm mt-2 hidden">Nerasta susijusių įrašų.</p>
+        </section>
+      </main>
+
+      <!-- DESKTOP: Susiję šone (dešinėje) -->
+      <aside class="hidden lg:block lg:col-span-4">
+        <div class="rel-aside">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-xl font-extrabold">Susiję straipsniai</h3>
+            <button id="relToggle" class="text-sm px-3 py-1 rounded border border-gray-700 bg-gray-800 hover:bg-gray-700">Rodyti daugiau</button>
+          </div>
+
+          <!-- Skeleton (desktop) -->
+          <div id="relSkeletonAside" class="space-y-3">
+            <div class="rel-skel"><div class="ph"></div><div class="ln" style="width:85%"></div><div class="ln" style="width:55%"></div></div>
+            <div class="rel-skel"><div class="ph"></div><div class="ln" style="width:75%"></div><div class="ln" style="width:45%"></div></div>
+          </div>
+
+          <div id="relAsideList" class="rel-list"></div>
+          <p id="relEmptyAside" class="text-gray-400 text-sm mt-2 hidden">Nerasta susijusių įrašų.</p>
+        </div>
+      </aside>
+    </div>
+
+    <div class="h-16"></div>
+  </div>
+
+  <!-- Lipni apačios dalinimosi juosta (telefonui) -->
+  <div class="share-bar no-print block lg:hidden">
+    <div class="mx-auto max-w-xl">
+      <div class="mx-3 rounded-2xl bg-gray-900 border border-gray-800 shadow-2xl flex justify-between items-center px-3 py-2">
+        <button id="mCopy" class="px-4 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-black font-semibold flex-1 mr-2">Kopijuoti</button>
+        <a id="mTw" href="#" target="_blank" rel="noopener" class="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 border border-gray-700 flex-1 text-center mr-2">X</a>
+        <a id="mLi" href="#" target="_blank" rel="noopener" class="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 border border-gray-700 flex-1 text-center">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ===== Progreso juosta + skaitymo laikas ===== */
+    const bar = document.getElementById('progressBar');
+    const article = document.getElementById('articleContent');
+    function onScroll(){ 
+      const full = article.offsetHeight - window.innerHeight;
+      const passed = Math.min(Math.max(window.scrollY - (article.offsetTop - 60), 0), full);
+      const pct = full > 0 ? (passed / full) * 100 : 0;
+      bar.style.width = pct + '%';
+    }
+    window.addEventListener('scroll', onScroll);
+    window.addEventListener('load', onScroll);
+
+    (function readingTime(){ 
+      const text = article.innerText || '';
+      const words = text.trim().split(/\s+/).length;
+      const minutes = Math.max(1, Math.round(words / 220));
+      document.getElementById('readingTime').textContent = `~${minutes} min`;
+    })();
+
+    /* ===== Dalinimasis ===== */
+    const pageURL = window.location.href;
+    const pageTitle = document.title;
+    const encoded = encodeURIComponent(pageURL);
+    const encodedTitle = encodeURIComponent(pageTitle);
+
+    async function copyLink(btn){ 
+      try{ 
+        await navigator.clipboard.writeText(pageURL);
+        const old = btn.textContent;
+        btn.textContent = 'Nukopijuota!';
+        setTimeout(()=>btn.textContent = old, 1200);
+      }catch(e){ alert('Nepavyko nukopijuoti nuorodos'); }
+    }
+    document.getElementById('shareBtn')?.addEventListener('click', async () => { 
+      if (navigator.share) { try { await navigator.share({ title: pageTitle, url: pageURL }); } catch(_) {} }
+      else { alert('Dalijimosi funkcija šiame įrenginyje nepalaikoma.'); }
+    });
+    document.getElementById('copyBtn')?.addEventListener('click', (e)=>copyLink(e.currentTarget));
+    document.getElementById('twBtn')?.setAttribute('href', `https://twitter.com/intent/tweet?url=${encoded}&text=${encodedTitle}`);
+    document.getElementById('liBtn')?.setAttribute('href', `https://www.linkedin.com/sharing/share-offsite/?url=${encoded}`);
+    document.getElementById('mTw').href = `https://twitter.com/intent/tweet?url=${encoded}&text=${encodedTitle}`;
+    document.getElementById('mLi').href = `https://www.linkedin.com/sharing/share-offsite/?url=${encoded}`;
+    document.getElementById('mCopy').onclick = (e)=>copyLink(e.currentTarget);
+
+    /* ===== Susiję straipsniai ===== */
+    const RELATED_CANDIDATES = ["../../map_data/region_map.json","../map_data/region_map.json","/map_data/region_map.json"];
+    const CURRENT_NICHE  = 'Politika';
+
+    const relRow          = document.getElementById('relRow');
+    const relSkeletonMob  = document.getElementById('relSkeletonMobile');
+    const relEmptyMob     = document.getElementById('relEmptyMobile');
+
+    const relAsideList    = document.getElementById('relAsideList');
+    const relSkeletonAside= document.getElementById('relSkeletonAside');
+    const relEmptyAside   = document.getElementById('relEmptyAside');
+    const relToggle       = document.getElementById('relToggle');
+
+    let relAll = []; let expanded = false;
+
+    function parseDate(d){ const dt=new Date(d); return isNaN(dt.getTime())?new Date(0):dt; }
+    function fmtDate(d){ return new Date(d).toLocaleDateString('lt-LT',{year:'numeric',month:'short',day:'2-digit'}); }
+    function norm(s){ return (s||'').toLowerCase().replace(/\s+/g,' ').trim(); }
+    function flattenData(obj){ const out=[]; for(const country in obj){ (obj[country]||[]).forEach(a=>out.push(Object.assign({country},a))); } return out; }
+    function buildCard(a){ 
+      const img = a.image ? `<img class="rel-img" src="${a.image}" alt="">` : `<div class="rel-img"></div>`;
+      return `
+        <a class="rel-card" href="${a.url}" target="_blank" rel="noopener" aria-label="${a.title}">
+          ${img}
+          <div class="rel-body">
+            <div class="rel-title">${a.title||'Be pavadinimo'}</div>
+            <div class="rel-meta">
+              <span>${fmtDate(a.date||'')}</span>
+              ${a.niche?`<span class="rel-badge">${a.niche}</span>`:''}
+              ${a.country?`<span class="rel-badge">${a.country}</span>`:''}
+            </div>
+          </div>
+        </a>`;
+    }
+    function renderRelated(list){ 
+      relRow.innerHTML = list.map(buildCard).join('');
+      relAsideList.innerHTML = list.map(buildCard).join('');
+    }
+    function updateToggle(){ 
+      if(!relToggle) return;
+      relToggle.textContent = expanded ? 'Rodyti mažiau' : 'Rodyti daugiau';
+    }
+    relToggle?.addEventListener('click', ()=>{ 
+      expanded = !expanded; updateToggle();
+      const visible = expanded ? relAll : relAll.slice(0, 6);
+      renderRelated(visible);
+    });
+
+    async function fetchFirst(paths){ 
+      for (const p of paths){ 
+        try { const r = await fetch(p); if (r.ok) return await r.json(); } catch(_){
+          /* bandome kitą kelią */
+        }
+      }
+      throw new Error('Nepavyko gauti region_map.json iš nurodytų kelių.');
+    }
+
+    async function loadRelated(){ 
+      relSkeletonMob.style.display   = 'grid';
+      relSkeletonAside.style.display = 'block';
+      try{ 
+        const data = await fetchFirst(RELATED_CANDIDATES);
+        const all  = flattenData(data);
+        const hereTitle = norm(document.getElementById('pageTitle')?.textContent || document.title);
+        const hereUrl   = window.location.href;
+
+        let current = all.find(a => (a.url && (hereUrl.endsWith(a.url) || a.url === hereUrl)));
+        if (!current) current = all.find(a => norm(a.title) === hereTitle) || null;
+
+        const niche = (current?.niche) || CURRENT_NICHE;
+        let rel = all.filter(a => a.niche === niche && a.url !== current?.url);
+        if (rel.length === 0) rel = all.filter(a => a.niche === niche);
+        rel.sort((a,b)=> parseDate(b.date)-parseDate(a.date));
+        if (rel.length === 0) rel = all.sort((a,b)=> parseDate(b.date)-parseDate(a.date));
+
+        relAll = rel.slice(0, 18);
+        const initial = relAll.slice(0, 6);
+
+        relSkeletonMob.style.display   = 'none';
+        relSkeletonAside.style.display = 'none';
+
+        if (relAll.length === 0){ 
+          relEmptyMob.classList.remove('hidden');
+          relEmptyAside.classList.remove('hidden');
+          relToggle?.style && (relToggle.style.display = 'none');
+          return;
+        }
+        renderRelated(initial);
+        updateToggle();
+
+        const mm = window.matchMedia('(min-width:1024px)');
+        mm.addEventListener?.('change', ()=>{ 
+          const visible = expanded ? relAll : relAll.slice(0,6);
+          renderRelated(visible);
+        });
+
+      }catch(e){ 
+        relSkeletonMob.style.display   = 'none';
+        relSkeletonAside.style.display = 'none';
+        relEmptyMob.classList.remove('hidden');
+        relEmptyAside.classList.remove('hidden');
+        relToggle?.style && (relToggle.style.display = 'none');
+        console.warn('Nepavyko įkelti susijusių straipsnių:', e);
+      }
+    }
+    loadRelated();
+  </script>
+</body>
+</html>

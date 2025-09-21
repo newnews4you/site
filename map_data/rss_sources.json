@@ -1,0 +1,40 @@
+{
+  "Politika": [
+    "https://feeds.bbci.co.uk/news/politics/rss.xml",
+    "https://www.politico.eu/feed/",
+    "https://www.dailynation.africa/kenya/news/politics/rss.xml",
+    "https://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/section/world/rss.xml"
+  ],
+  "Verslas": [
+    "https://www.ft.com/?format=rss",
+    "https://www.cnbc.com/id/10001147/device/rss/rss.html"
+  ],
+  "Technologijos": [
+    "https://www.theverge.com/rss/index.xml",
+    "https://gadgets.ndtv.com/rss/feeds",
+    "https://www.arnnet.com.au/rss/",
+    "https://www.techzim.co.zw/feed/",
+    "https://tech.eu/feed/"
+  ],
+  "Sveikata": [
+    "https://www.health24.com/rss/news",
+    "https://www.bbc.com/news/health/rss.xml",
+    "https://www.medicalnewstoday.com/rss",
+    "https://www.japantimes.co.jp/feed/",
+    "https://www1.folha.uol.com.br/internacional/en/rss091.xml"
+  ],
+  "Mokslas": [
+    "https://www.nature.com/subjects/science/rss",
+    "https://www.scidev.net/global/feed/",
+    "https://www.dw.com/en/top-stories/science/s-12574/rss.xml"
+  ],
+  "Sportas": [
+    "https://www.bbc.com/sport/rss.xml",
+    "https://www.supersport.com/rss/news",
+    "https://www.espn.com/espn/rss/news",
+    "https://www.sportskeeda.com/feed",
+    "https://www.abc.net.au/news/feed/51120/rss.xml"
+  ]
+
+}
+
