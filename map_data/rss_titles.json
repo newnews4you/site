@@ -2,5 +2,13 @@
   "Ūkis": {
     "title_ai_en": "Farm",
     "title_native": "Ūkis"
+  },
+  "Karas": {
+    "title_ai_en": "War",
+    "title_native": "Karas"
+  },
+  "Box": {
+    "title_ai_en": "Box",
+    "title_native": "Box"
   }
 }

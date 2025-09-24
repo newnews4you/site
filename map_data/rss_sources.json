@@ -1,7 +1,13 @@
 {
   "Politika": [
     "https://feeds.bbci.co.uk/news/politics/rss.xml",
-    "https://www.politico.eu/feed/"]
+    "https://www.politico.eu/feed/"
+  ],
+  "Karas": [
+    "https://www.rt.com/rss/"
+  ],
+  "Box": [
+    "https://www.theguardian.com/sport/boxing/rss",
+    "https://www.espn.com/espn/rss/boxing/news"
+  ]
 }
-
-
