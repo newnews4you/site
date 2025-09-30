@@ -34,5 +34,9 @@
   "Futbolas": {
     "title_ai_en": "Football",
     "title_native": "Futbolas"
+  },
+  "Regbis": {
+    "title_ai_en": "Rugby",
+    "title_native": "Regbis"
   }
 }

@@ -48,5 +48,12 @@
     "https://www.fourfourtwo.com/rss",
     "http://feeds.bbci.co.uk/sport/football/rss.xml",
     "https://www.espnfc.us/rss"
+  ],
+  "Regbis": [
+    "https://www.theguardian.com/sport/rugby-union/rss",
+    "https://www.smh.com.au/rss/national/nsw.xml",
+    "https://www.smh.com.au/rss/world.xml",
+    "https://www.smh.com.au/rss/national.xml",
+    "https://www.theage.com.au/rss/national/victoria.xml"
   ]
 }
