@@ -1,40 +1,52 @@
 {
   "Politika": [
     "https://feeds.bbci.co.uk/news/politics/rss.xml",
-    "https://www.politico.eu/feed/",
-    "https://www.dailynation.africa/kenya/news/politics/rss.xml",
-    "https://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/section/world/rss.xml"
+    "https://www.politico.eu/feed/"
   ],
-  "Verslas": [
-    "https://www.ft.com/?format=rss",
-    "https://www.cnbc.com/id/10001147/device/rss/rss.html"
+  "Karas": [
+    "https://www.rt.com/rss/"
   ],
-  "Technologijos": [
-    "https://www.theverge.com/rss/index.xml",
-    "https://gadgets.ndtv.com/rss/feeds",
-    "https://www.arnnet.com.au/rss/",
-    "https://www.techzim.co.zw/feed/",
-    "https://tech.eu/feed/"
+  "Box": [
+    "https://www.theguardian.com/sport/boxing/rss",
+    "https://www.espn.com/espn/rss/boxing/news"
   ],
-  "Sveikata": [
-    "https://www.health24.com/rss/news",
-    "https://www.bbc.com/news/health/rss.xml",
-    "https://www.medicalnewstoday.com/rss",
-    "https://www.japantimes.co.jp/feed/",
-    "https://www1.folha.uol.com.br/internacional/en/rss091.xml"
+  "Karas Ukrainoje": [
+    "https://www.pravda.com.ua/eng/rss/",
+    "https://www.pravda.com.ua/rss/view_mainnews/"
   ],
-  "Mokslas": [
-    "https://www.nature.com/subjects/science/rss",
-    "https://www.scidev.net/global/feed/",
-    "https://www.dw.com/en/top-stories/science/s-12574/rss.xml"
+  "Teatras": [
+    "https://rss.nytimes.com/services/xml/rss/nyt/Theater.xml",
+    "https://www.theguardian.com/stage/rss",
+    "https://www.broadwayworld.com/rss.cfm",
+    "https://www.theartsdesk.com/rss.xml",
+    "https://www.chicagotribune.com/feed/"
   ],
-  "Sportas": [
-    "https://www.bbc.com/sport/rss.xml",
-    "https://www.supersport.com/rss/news",
-    "https://www.espn.com/espn/rss/news",
-    "https://www.sportskeeda.com/feed",
-    "https://www.abc.net.au/news/feed/51120/rss.xml"
+  "Lektuvo skrydžiai": [
+    "https://www.theguardian.com/travel/rss",
+    "https://www.aerotime.aero/rss",
+    "https://www.independent.co.uk/us/rss",
+    "https://aviationweek.com/rss.xml",
+    "https://simpleflying.com/feed/"
+  ],
+  "teatras": [
+    "https://rss.nytimes.com/services/xml/rss/nyt/Theater.xml",
+    "https://www.broadwayworld.com/rss.cfm",
+    "https://www.theguardian.com/stage/rss",
+    "https://www.americantheatre.org/feed/",
+    "https://www.chicagotribune.com/feed/"
+  ],
+  "Skrydžiai": [
+    "https://www.theguardian.com/travel/rss",
+    "https://www.aviationtoday.com/feed/",
+    "https://www.tagesschau.de/index~rss2.xml",
+    "https://atwonline.com/rss.xml",
+    "https://aviationweek.com/rss.xml"
+  ],
+  "Futbolas": [
+    "https://www.theguardian.com/football/rss",
+    "https://www.bundesliga.com/en/rss/news",
+    "https://www.fourfourtwo.com/rss",
+    "http://feeds.bbci.co.uk/sport/football/rss.xml",
+    "https://www.espnfc.us/rss"
   ]
-
 }
-

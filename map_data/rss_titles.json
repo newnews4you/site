@@ -2,5 +2,37 @@
   "Ūkis": {
     "title_ai_en": "Farm",
     "title_native": "Ūkis"
+  },
+  "Karas": {
+    "title_ai_en": "War",
+    "title_native": "Karas"
+  },
+  "Box": {
+    "title_ai_en": "Box",
+    "title_native": "Box"
+  },
+  "Karas Ukrainoje": {
+    "title_ai_en": "War in Ukraine",
+    "title_native": "Karas Ukrainoje"
+  },
+  "Teatras": {
+    "title_ai_en": "Theater",
+    "title_native": "Teatras"
+  },
+  "Lektuvo skrydžiai": {
+    "title_ai_en": "Airplane flights",
+    "title_native": "Lektuvo skrydžiai"
+  },
+  "teatras": {
+    "title_ai_en": "theater",
+    "title_native": "teatras"
+  },
+  "Skrydžiai": {
+    "title_ai_en": "Flights",
+    "title_native": "Skrydžiai"
+  },
+  "Futbolas": {
+    "title_ai_en": "Football",
+    "title_native": "Futbolas"
   }
 }
