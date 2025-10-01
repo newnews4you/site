@@ -60,5 +60,14 @@
   "Lietuva": [
     "https://www.baltictimes.com/rss/",
     "https://lithuaniatribune.com/feed/"
+  ],
+  "Karas izraelyje": [
+    "https://www.timesofisrael.com/feed/",
+    "https://www.israelhayom.com/feed/"
+  ],
+  "Ufc 322": [
+    "https://www.ufc.com/rss/news",
+    "https://www.sherdog.com/rss/news.xml",
+    "https://sports.yahoo.com/rss/"
   ]
 }
