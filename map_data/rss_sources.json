@@ -56,5 +56,9 @@
     "https://www.smh.com.au/rss/national.xml",
     "https://www.theage.com.au/rss/national/victoria.xml"
   ],
-  "Karate": []
+  "Karate": [],
+  "Lietuva": [
+    "https://www.baltictimes.com/rss/",
+    "https://lithuaniatribune.com/feed/"
+  ]
 }
