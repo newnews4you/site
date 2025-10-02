@@ -5,5 +5,10 @@
   ],
   "Karas": [
     "https://www.namibian.com.na/feed/"
+  ],
+  "švietimas": [
+    "https://www.theguardian.com/education/rss",
+    "https://www.chicagotribune.com/feed/",
+    "https://feeds.bbci.co.uk/news/education/rss.xml"
   ]
 }
