@@ -10,5 +10,11 @@
     "https://www.theguardian.com/education/rss",
     "https://www.chicagotribune.com/feed/",
     "https://feeds.bbci.co.uk/news/education/rss.xml"
+  ],
+  "Ufc": [
+    "https://www.lowkickmma.com/feed/",
+    "https://www.ufc.com/rss/news",
+    "https://sports.yahoo.com/rss/",
+    "https://www.bjpenn.com/feed/"
   ]
 }
