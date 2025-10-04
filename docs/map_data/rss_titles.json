@@ -54,5 +54,17 @@
   "Ufc 322": {
     "title_ai_en": "UFC 322",
     "title_native": "Ufc 322"
+  },
+  "švietimas": {
+    "title_ai_en": "Education",
+    "title_native": "švietimas"
+  },
+  "Ufc": {
+    "title_ai_en": "UFC",
+    "title_native": "Ufc"
+  },
+  "UFC": {
+    "title_ai_en": "Ultimate Fighting Championship",
+    "title_native": "UFC"
   }
 }
