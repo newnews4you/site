@@ -19,6 +19,9 @@
   ],
   "UFC": [
     "https://www.espn.com/espn/rss/mma/news",
-    "https://www.ufc.com/rss/news"
+    "https://www.ufc.com/rss/news",
+    "http://www.ufc.com/rss/news",
+    "https://www.bloodyelbow.com/rss",
+    "https://www.sherdog.com/rss/news"
   ]
 }
