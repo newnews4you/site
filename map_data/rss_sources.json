@@ -15,7 +15,8 @@
     "https://www.lowkickmma.com/feed/",
     "https://www.ufc.com/rss/news",
     "https://sports.yahoo.com/rss/",
-    "https://www.bjpenn.com/feed/"
+    "https://www.bjpenn.com/feed/",
+    "http://www.ufc.com/rss/news"
   ],
   "UFC": [
     "https://www.espn.com/espn/rss/mma/news",
