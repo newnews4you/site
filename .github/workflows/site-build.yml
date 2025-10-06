@@ -1,0 +1,129 @@
+name: Build & Publish site
+
+on:
+  workflow_dispatch:
+  schedule:
+  - cron: "0 0 * * *"
+  push:
+    branches: [ main ]
+    paths:
+      - "page/**"
+      - ".github/workflows/site-build.yml"
+      - "requirements.txt"
+      - "**.py"
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    env:
+      OPENROUTER_API_KEY:  ${{ secrets.OPENROUTER_API_KEY }}
+      PEXELS_API_KEY:      ${{ secrets.PEXELS_API_KEY }}
+      GCP_SA_BASE64:       ${{ secrets.GCP_SA_BASE64 }}
+      FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+
+      NEWS_SEARCH_MODEL: "openai/gpt-4o-mini-search-preview"
+      NEWS_WRITE_MODEL:  "x-ai/grok-4-fast:free"
+
+      OPENROUTER_SITE_URL: "https://github.com/newnews4you/backend"
+      OPENROUTER_APP_NAME: "News pipeline"
+
+    steps:
+      - name: Checkout backend
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            pip-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: (Optional) Write GCP service account key
+        if: ${{ env.GCP_SA_BASE64 != '' }}
+        run: |
+          mkdir -p page/map_data
+          echo "${GCP_SA_BASE64}" | base64 -d > page/map_data/service-account.json
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$PWD/page/map_data/service-account.json" >> $GITHUB_ENV
+
+      - name: Generate site content
+        run: |
+          python run_all.py
+          rsync -a --delete page/ out/
+
+      # Publikuojame į KITĄ repo (newnews4you/site) -> nauja šaka + PR į main (docs/)
+      - name: Create PR to newnews4you/site:main with docs/
+        env:
+          PAT: ${{ secrets.PAT }}   # tavo secret pavadinimas
+        run: |
+          set -euo pipefail
+
+          sudo apt-get update -y
+          sudo apt-get install -y jq
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Naudosime PAT visiems https://github.com/... URL
+          git config --global url."https://x-access-token:${PAT}@github.com/".insteadOf "https://github.com/"
+
+          # 1) Klonuojame target repo (main)
+          git clone --branch main https://github.com/newnews4you/site.git site-repo
+          cd site-repo
+
+          # 2) Nauja CI šaka
+          BRANCH_NAME="ci/docs-$(date +%Y%m%d%H%M%S)"
+          git checkout -b "$BRANCH_NAME"
+
+          # 3) Atnaujiname docs/ iš out/
+          rm -rf docs
+          mkdir -p docs
+          rsync -a --delete ../out/ docs/
+
+          git add docs
+
+          # 4) Jei nėra pokyčių – baigiam
+          if git diff --cached --quiet; then
+            echo "No changes to publish."
+            exit 0
+          fi
+
+          # 5) Commit & push
+          git commit -m "Publish site into docs/ from backend (CI)"
+          git push --set-upstream origin "$BRANCH_NAME"
+
+          # 6) Sukuriame PR į main
+          PR_TITLE="Publish site into docs/ from backend (CI)"
+          PR_BODY="Automated update of **docs/** from backend workflow. This PR updates the website content without bypassing branch protection."
+          API_URL="https://api.github.com/repos/newnews4you/site/pulls"
+
+          CREATE_PR_RESPONSE=$(
+            curl -sS -X POST \
+              -H "Authorization: token ${PAT}" \
+              -H "Accept: application/vnd.github+json" \
+              "${API_URL}" \
+              -d "{\"title\":\"${PR_TITLE}\",\"head\":\"${BRANCH_NAME}\",\"base\":\"main\",\"body\":\"${PR_BODY}\"}"
+          )
+
+          echo "PR response:"
+          echo "$CREATE_PR_RESPONSE" | jq .
+
+          PR_URL=$(echo "$CREATE_PR_RESPONSE" | jq -r '.html_url // empty')
+          if [ -n "$PR_URL" ]; then
+            echo "Pull Request created: $PR_URL"
+          else
+            echo "Failed to create PR."; exit 1
+          fi
