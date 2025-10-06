@@ -58,5 +58,17 @@
   "švietimas": {
     "title_ai_en": "Education",
     "title_native": "švietimas"
+  },
+  "Ufc": {
+    "title_ai_en": "Ufc",
+    "title_native": "Ufc"
+  },
+  "UFC": {
+    "title_ai_en": "UFC",
+    "title_native": "UFC"
+  },
+  "Ekonomika": {
+    "title_ai_en": "Ekonomika",
+    "title_native": "Ekonomika"
   }
 }
