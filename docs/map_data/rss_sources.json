@@ -10,5 +10,20 @@
     "https://www.theguardian.com/education/rss",
     "https://www.chicagotribune.com/feed/",
     "https://feeds.bbci.co.uk/news/education/rss.xml"
-  ]
+  ],
+  "Ufc": [
+    "https://www.lowkickmma.com/feed/",
+    "https://www.ufc.com/rss/news",
+    "https://sports.yahoo.com/rss/",
+    "https://www.bjpenn.com/feed/",
+    "http://www.ufc.com/rss/news"
+  ],
+  "UFC": [
+    "https://www.espn.com/espn/rss/mma/news",
+    "https://www.ufc.com/rss/news",
+    "http://www.ufc.com/rss/news",
+    "https://www.bloodyelbow.com/rss",
+    "https://www.sherdog.com/rss/news"
+  ],
+  "Ekonomika": []
 }
