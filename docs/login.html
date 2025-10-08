@@ -187,13 +187,114 @@
   const auth = firebase.auth();
   const db   = firebase.firestore();
 
+  const ALWAYS_UPPER = new Set(["AI","MMA","NBA","F1"]);
+  const NORM_MAP = {
+    politika: "Politika",
+    politics: "Politika",
+    political: "Politika",
+    sportas: "Sportas",
+    sport: "Sportas",
+    "sport news": "Sportas",
+    technologijos: "Technologijos",
+    technologija: "Technologijos",
+    technology: "Technologijos",
+    sveikata: "Sveikata",
+    health: "Sveikata",
+    verslas: "Verslas",
+    business: "Verslas",
+    automobiliai: "Automobiliai",
+    automobilis: "Automobiliai",
+    cars: "Automobiliai",
+    kriptovaliutos: "Kriptovaliutos",
+    kriptovaliuta: "Kriptovaliutos",
+    crypto: "Kriptovaliutos",
+    cryptocurrency: "Kriptovaliutos",
+    fotografija: "Fotografija",
+    photography: "Fotografija",
+    menas: "Menas",
+    art: "Menas",
+    maistas: "Maistas",
+    food: "Maistas",
+    kinas: "Kinas",
+    film: "Kinas",
+    movies: "Kinas",
+    žaidimai: "Žaidimai",
+    zaidimai: "Žaidimai",
+    games: "Žaidimai",
+    kelionės: "Kelionės",
+    keliones: "Kelionės",
+    travel: "Kelionės",
+    knygos: "Knygos",
+    books: "Knygos",
+    muzika: "Muzika",
+    music: "Muzika",
+    "dirbtinis intelektas": "Dirbtinis intelektas",
+    "dirbtinio intelekto": "Dirbtinis intelektas",
+    "dirbtinis intelektas ai": "Dirbtinis intelektas",
+    ai: "Dirbtinis intelektas",
+    karas: "Karas",
+    war: "Karas",
+    "krepšinis": "Krepšinis",
+    krepsinis: "Krepšinis",
+    basketball: "Krepšinis",
+    mma: "MMA",
+    "švietimas": "Švietimas",
+    svietimas: "Švietimas",
+    education: "Švietimas",
+    kita: "Kita",
+    other: "Kita"
+  };
+
+  function normalizeNicheName(raw){
+    if (!raw) return "";
+    const base = String(raw).trim();
+    const key = base
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
+
+    if (!key) return "Kita";
+    let canonical = NORM_MAP[key];
+    if (!canonical && key.endsWith(' naujienos')) {
+      canonical = NORM_MAP[key.replace(/ naujienos$/, '')];
+    }
+    if (canonical) return canonical;
+
+    const tokens = base.split(/[\s\/-]+/).filter(Boolean);
+    if (!tokens.length) return "Kita";
+    return tokens.map(token => {
+      const upper = token.toUpperCase();
+      if (ALWAYS_UPPER.has(upper) || (token.length <= 3 && token === token.toUpperCase())) {
+        return upper;
+      }
+      const lower = token.toLowerCase();
+      return lower.charAt(0).toUpperCase() + lower.slice(1);
+    }).join(' ');
+  }
+
+  const dedupeNormalized = (list)=>{
+    const seen = new Set();
+    const out = [];
+    (list || []).forEach(item => {
+      const norm = normalizeNicheName(item);
+      if (!norm || (norm === 'Kita' && !String(item || '').trim())) return;
+      if (seen.has(norm)) return;
+      seen.add(norm);
+      out.push(norm);
+    });
+    return out;
+  };
+
   // ---- Data ----
-  const ALL_NICHES_BASE = [
+  const BASE_NICHES = [
     "Politika","Sportas","Technologijos","Sveikata","Verslas",
     "Automobiliai","Kriptovaliutos","Fotografija","Menas","Maistas",
-    "Kinas","Žaidimai","Kelionės","Knygos","Muzika","Dirbtinis Intelektas",
+    "Kinas","Žaidimai","Kelionės","Knygos","Muzika","Dirbtinis intelektas",
     "Karas","Krepšinis","MMA","Švietimas"
   ];
+  const ALL_NICHES_BASE = dedupeNormalized(BASE_NICHES);
   const RSS_SOURCES_URL = "map_data/rss_sources.json";
   let TOPICS_FROM_FEEDS = [];
   let selectedNiches = [];
@@ -218,16 +319,20 @@
       const res = await fetch(RSS_SOURCES_URL, {cache:"no-store"});
       if (!res.ok) throw 0;
       const data = await res.json();
-      TOPICS_FROM_FEEDS = Object.keys(data || {});
+      TOPICS_FROM_FEEDS = dedupeNormalized(Object.keys(data || {}));
     }catch(_){ TOPICS_FROM_FEEDS = []; }
   }
 
   function mergedNiches(){
-    return Array.from(new Set([...ALL_NICHES_BASE, ...customTopics, ...TOPICS_FROM_FEEDS]));
+    return dedupeNormalized([
+      ...ALL_NICHES_BASE,
+      ...customTopics,
+      ...TOPICS_FROM_FEEDS
+    ]);
   }
 
   function renderNiches(selected=[]){
-    selectedNiches = [...selected];
+    selectedNiches = dedupeNormalized(selected);
     const all = mergedNiches();
     const box = $("#nichesList");
     box.innerHTML = "";
@@ -236,7 +341,8 @@
     all.forEach(n=>{
       if (term && !n.toLowerCase().includes(term)) return;
       const b = document.createElement("button");
-      b.className = "chip" + (selected.includes(n) ? " active": "");
+      const isActive = selectedNiches.includes(n);
+      b.className = "chip" + (isActive ? " active": "");
       b.textContent = n;
       b.onclick = ()=>{
         b.classList.toggle("active");
@@ -279,7 +385,7 @@
 
   $("#addTopicBtn").onclick = ()=>{
     const inp = $("#newTopicInput");
-    const v = (inp.value||"").trim();
+    const v = normalizeNicheName(inp.value||"");
     if (!v) return;
     if (!customTopics.includes(v)) {
       customTopics.push(v);
@@ -334,6 +440,8 @@
     if (!auth.currentUser){ setMsg($("#msgSave"), "Neprisijungęs vartotojas!"); return; }
     setLoading(true);
     try{
+      selectedNiches = dedupeNormalized(selectedNiches);
+      customTopics   = dedupeNormalized(customTopics);
       await db.collection("users").doc(auth.currentUser.uid).set({
         niches: selectedNiches,
         customTopics: customTopics
@@ -374,8 +482,8 @@
       try{
         const doc = await db.collection("users").doc(user.uid).get();
         const data = doc.exists ? doc.data() : {};
-        selectedNiches = data.niches || [];
-        customTopics   = data.customTopics || [];
+        selectedNiches = dedupeNormalized(data.niches || []);
+        customTopics   = dedupeNormalized(data.customTopics || []);
       }catch(_){
         selectedNiches=[]; customTopics=[];
       }
