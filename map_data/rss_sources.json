@@ -2,20 +2,5 @@
   "Politika": [
     "https://feeds.bbci.co.uk/news/politics/rss.xml",
     "https://www.politico.eu/feed/"
-  ],
-  "Karas": [
-    "https://www.namibian.com.na/feed/"
-  ],
-  "švietimas": [
-    "https://www.theguardian.com/education/rss",
-    "https://www.chicagotribune.com/feed/",
-    "https://feeds.bbci.co.uk/news/education/rss.xml"
-  ],
-  "Ufc": [
-    "https://www.lowkickmma.com/feed/",
-    "https://www.ufc.com/rss/news",
-    "https://sports.yahoo.com/rss/",
-    "https://www.bjpenn.com/feed/",
-    "http://www.ufc.com/rss/news"
   ]
 }
