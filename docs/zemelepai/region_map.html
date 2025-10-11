@@ -39,6 +39,9 @@
     .nav{height:var(--navH);position:sticky;top:0;z-index:70;display:flex;align-items:center;gap:12px;padding:0 12px;border-bottom:1px solid #121826;background:rgba(10,13,18,.72);backdrop-filter:blur(6px)}
     .brand{display:flex;gap:10px;align-items:center;font-weight:800}
     .brand i{color:var(--brand)}
+    .nav-links{display:flex;gap:12px;align-items:center;font-size:.9rem;color:#a7bed6}
+    .nav-links a{padding:6px 10px;border-radius:999px;border:1px solid transparent;transition:color .15s ease,background .15s ease,border-color .15s ease}
+    .nav-links a:hover,.nav-links a:focus-visible{color:#e8f6ff;background:rgba(73,198,255,.14);border-color:rgba(73,198,255,.32)}
     .spacer{flex:1}
     .hamburger{display:none;width:38px;height:38px;border-radius:10px;border:1px solid #121826;background:#0c1118;color:#cfeeff;cursor:pointer}
     .account{padding:8px 12px;border-radius:999px;border:1px solid #121826;background:#0c1118;color:#cfeeff;font-weight:700}
@@ -55,6 +58,11 @@
     #nicheBar .chip.active{background:#49c6ff;color:#07121a;border-color:transparent;font-weight:700}
     .field{display:flex;flex-direction:column;gap:6px}
     .field select,.field input{background:#0e131d;border:1px solid #121826;color:var(--text);padding:10px 12px;border-radius:10px}
+    .date-field{gap:6px}
+    .date-field .date-input{position:relative;display:flex;align-items:center}
+    .date-field input{width:100%;padding-right:36px}
+    .date-clear{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:none;background:transparent;color:#89a7c5;cursor:pointer;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;transition:background .15s ease,color .15s ease}
+    .date-clear:hover,.date-clear:focus-visible{background:rgba(20,30,44,.7);color:#d6e9ff}
 
     /* MAP */
     .map-card{position:relative;min-height:calc(100vh - var(--navH) - 24px);padding:16px 16px 16px;display:flex;flex-direction:column;gap:12px}
@@ -62,9 +70,11 @@
     .toolbar-label{font-size:.85rem;color:#cdeaff;text-transform:uppercase;letter-spacing:.8px}
     .toolbar-search{display:flex;align-items:center;gap:10px;background:#0b141f;border:1px solid #121826;border-radius:12px;padding:10px 12px;color:#9fb6ce}
     .toolbar-search i{color:#6fbfff}
-    .toolbar-search input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-size:.95rem}
-    .toolbar-search button{border:none;background:rgba(15,23,35,.8);color:#9fb6ce;border-radius:8px;width:32px;height:32px;display:grid;place-items:center;cursor:pointer;transition:background .15s ease,color .15s ease}
+    .toolbar-search input{flex:1 1 auto;min-width:0;background:transparent;border:none;outline:none;color:#fff;font-size:.95rem;appearance:none;-webkit-appearance:none;padding:0}
+    .toolbar-search input::-webkit-search-cancel-button{display:none}
+    .toolbar-search button{border:none;background:rgba(15,23,35,.8);color:#9fb6ce;border-radius:8px;width:32px;height:32px;display:grid;place-items:center;cursor:pointer;transition:background .15s ease,color .15s ease,opacity .15s ease,transform .15s ease;opacity:0;pointer-events:none;transform:scale(.85)}
     .toolbar-search button:hover{background:#122032;color:#d8f3ff}
+    .toolbar-search button.is-visible{opacity:1;pointer-events:auto;transform:scale(1)}
     .map-frame{position:relative;flex:1;border-radius:12px;border:1px solid #121826;overflow:hidden;background:#05080c}
     #map{position:absolute;inset:0;height:100%;width:100%}
 
@@ -72,6 +82,9 @@
     .overlay{position:absolute;left:12px;top:12px;z-index:400;display:flex;gap:8px;flex-wrap:wrap;pointer-events:none}
     .overlay .pill{pointer-events:auto}
     .pill{display:flex;gap:8px;align-items:center;background:rgba(8,12,18,.76);backdrop-filter:blur(4px);border:1px solid #121826;border-radius:999px;padding:8px 12px;font-size:.9rem;color:#cfe5ff}
+    .reset-wrapper{position:absolute;right:12px;top:12px;z-index:410;display:flex;gap:8px}
+    .reset-wrapper button{border:none;background:rgba(8,12,18,.76);color:#9fb6ce;border:1px solid #121826;border-radius:10px;width:38px;height:38px;display:grid;place-items:center;cursor:pointer;transition:background .15s ease,color .15s ease}
+    .reset-wrapper button:hover,.reset-wrapper button:focus-visible{background:rgba(14,22,34,.85);color:#e7f6ff}
     .legend{position:absolute;left:12px;bottom:12px;z-index:400;display:flex;gap:12px;align-items:center;background:rgba(8,12,18,.76);border:1px solid #121826;padding:6px 10px;border-radius:999px;font-size:.9rem;color:#cfe5ff;pointer-events:none}
     .box{width:16px;height:12px;border-radius:3px;border:1px solid #1c2432;display:inline-block}
     .active{background:#49c6ff}.inactive{background:#111a25}
@@ -99,6 +112,8 @@
     .popup-flag i{color:var(--brand)}
     .popup-title{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .popup-count{margin-left:auto;font-size:.85rem;color:var(--popupSoft);background:#0f1a27;border:1px solid var(--popupStroke);border-radius:999px;padding:6px 10px}
+    .popup-close{border:none;background:transparent;color:#91bbd9;cursor:pointer;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;margin-left:4px;transition:background .15s ease,color .15s ease}
+    .popup-close:hover,.popup-close:focus-visible{background:rgba(14,22,35,.7);color:#e5f5ff}
     .popup-list{
       overflow:auto;
       padding:10px 16px 88px;  /* apačioje vieta veiksmų juostai */
@@ -132,6 +147,7 @@
     /* MOBILE */
     @media (max-width: 900px){
       .hamburger{display:flex}
+      .nav-links{display:none}
       .wrap{grid-template-columns:1fr}
       #drawerBackdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:900;display:none}
       .drawer-open #drawerBackdrop{display:block}
@@ -160,9 +176,11 @@
     .sheet{position:fixed;left:0;right:0;bottom:0;z-index:1001;background:var(--popupBg);border-top:1px solid var(--popupStroke);border-radius:16px 16px 0 0;max-height:90vh;transform:translateY(100%);transition:transform .22s ease;box-shadow:0 -18px 50px rgba(0,0,0,.6)}
     .sheet.open{transform:translateY(0)}
     .sheet-backdrop.open{display:block}
-    .sheet-header{position:sticky;top:0;background:var(--popupHdr);border-bottom:1px solid var(--popupStroke);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-radius:16px 16px 0 0}
+    .sheet-header{position:sticky;top:0;background:var(--popupHdr);border-bottom:1px solid var(--popupStroke);padding:12px 14px;display:flex;align-items:center;gap:10px;border-radius:16px 16px 0 0}
     .sheet-title{font-weight:800}
-    .sheet-count{font-size:.85rem;color:var(--popupSoft);background:#0f1a27;border:1px solid var(--popupStroke);border-radius:999px;padding:6px 10px}
+    .sheet-count{font-size:.85rem;color:var(--popupSoft);background:#0f1a27;border:1px solid var(--popupStroke);border-radius:999px;padding:6px 10px;margin-left:auto}
+    .sheet-close{border:none;background:transparent;color:#91bbd9;cursor:pointer;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;margin-left:4px;transition:background .15s ease,color .15s ease}
+    .sheet-close:hover,.sheet-close:focus-visible{background:rgba(14,22,35,.7);color:#e5f5ff}
     .sheet-body{
       padding:10px 14px 88px;  /* apačioje vieta veiksmų juostai */
       overflow:auto;
@@ -179,6 +197,11 @@
   <header class="nav">
     <button class="hamburger" id="toggleSidebar" aria-label="Meniu"><i class="fa-solid fa-bars"></i></button>
     <div class="brand"><i class="fa-solid fa-globe"></i> NewNews4You</div>
+    <nav class="nav-links" aria-label="Pagalbinės nuorodos">
+      <a href="../about.html">Apie mus</a>
+      <a href="../privacy.html">Privatumo politika</a>
+      <a href="../contact.html">Kontaktai</a>
+    </nav>
     <div class="spacer"></div>
     <a href="../login.html" class="account">Mano paskyra</a>
   </header>
@@ -192,8 +215,24 @@
       <section class="block">
         <h3>Filtrai</h3>
         <div class="field"><label for="countryFilter">Šalis</label><select id="countryFilter"></select></div>
-        <div class="field"><label for="dateFrom">Nuo</label><input type="text" id="dateFrom" placeholder="Pasirinkite datą"/></div>
-        <div class="field"><label for="dateTo">Iki</label><input type="text" id="dateTo" placeholder="Pasirinkite datą"/></div>
+        <div class="field date-field">
+          <label for="dateFrom">Nuo</label>
+          <div class="date-input">
+            <input type="text" id="dateFrom" placeholder="Pasirinkite datą" />
+            <button type="button" class="date-clear" data-target="dateFrom" aria-label="Išvalyti datą">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        </div>
+        <div class="field date-field">
+          <label for="dateTo">Iki</label>
+          <div class="date-input">
+            <input type="text" id="dateTo" placeholder="Pasirinkite datą" />
+            <button type="button" class="date-clear" data-target="dateTo" aria-label="Išvalyti datą">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        </div>
       </section>
     </aside>
 
@@ -208,15 +247,20 @@
           </button>
         </div>
       </div>
-      <div class="map-frame">
-        <div class="overlay">
-          <div class="pill"><i class="fa-regular fa-flag"></i><span id="activeCountries">0 šalys</span></div>
-          <div class="pill"><i class="fa-regular fa-file-lines"></i><span id="totalArticles">0 straipsnių</span></div>
-          <div class="pill"><i class="fa-regular fa-clock"></i><span id="lastUpdated">Atnaujinta šiandien</span></div>
-        </div>
-        <div id="map"></div>
-        <div class="legend">
-          <span><span class="box active"></span> Yra straipsnių</span>
+        <div class="map-frame">
+          <div class="overlay">
+            <div class="pill"><i class="fa-regular fa-flag"></i><span id="activeCountries">0 šalys</span></div>
+            <div class="pill"><i class="fa-regular fa-file-lines"></i><span id="totalArticles">0 straipsnių</span></div>
+            <div class="pill"><i class="fa-regular fa-clock"></i><span id="lastUpdated">Atnaujinta šiandien</span></div>
+          </div>
+          <div class="reset-wrapper">
+            <button type="button" id="resetView" aria-label="Atstatyti žemėlapio mastelį" title="Atstatyti žemėlapio mastelį">
+              <i class="fa-solid fa-arrows-rotate"></i>
+            </button>
+          </div>
+          <div id="map"></div>
+          <div class="legend">
+            <span><span class="box active"></span> Yra straipsnių</span>
           <span><span class="box inactive"></span> Nėra duomenų</span>
         </div>
       </div>
@@ -229,6 +273,9 @@
     <div class="sheet-header">
       <div class="sheet-title" id="sheetTitle">Šalis</div>
       <div class="sheet-count" id="sheetCount">0 straipsnių</div>
+      <button type="button" class="sheet-close" id="sheetClose" aria-label="Uždaryti kortelę">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
     </div>
     <div class="sheet-body" id="sheetBody"></div>
     <div class="sheet-actions" id="sheetActions"></div>
@@ -336,6 +383,8 @@
 
     /* Bottom sheet */
     const sheet = $('#sheet'), sheetBg = $('#sheetBackdrop'), sheetBody = $('#sheetBody'), sheetActions = $('#sheetActions');
+    const sheetCloseBtn = $('#sheetClose');
+    const resetViewBtn = $('#resetView');
     function openSheet(html, title, count){
       sheetBody.innerHTML = html;
       $('#sheetTitle').textContent = title;
@@ -349,6 +398,12 @@
       disableMap(false);
     }
     sheetBg.addEventListener('click', closeSheet);
+    sheetCloseBtn.addEventListener('click', closeSheet);
+    resetViewBtn?.addEventListener('click', (ev)=>{
+      ev.preventDefault();
+      ev.stopPropagation();
+      resetViewToAll();
+    });
 
     function disableMap(disable){
       if (!map) return;
@@ -356,6 +411,26 @@
       map.dragging[fn](); map.scrollWheelZoom[fn](); map.doubleClickZoom[fn](); map.boxZoom[fn](); map.keyboard[fn]();
       if (map.touchZoom) map.touchZoom[fn]();
       if (map.tap) map.tap[fn]();
+    }
+
+    window.NN_closePopup = function(){
+      try { map.closePopup(); } catch (_) {}
+      closeSheet();
+      highlightedCountry = selectedCountryFilter || '';
+      refreshCountryStyles();
+      refreshMarkerStyles();
+    };
+
+    async function resetViewToAll(){
+      if (!map) return;
+      selectedCountryFilter = '';
+      highlightedCountry = '';
+      const select = $('#countryFilter');
+      if (select) select.value = '';
+      await loadMapLayer();
+      try { map.closePopup(); } catch(_) {}
+      closeSheet();
+      focusActiveByNiche();
     }
 
     function setupAnalyticsPing(){
@@ -395,10 +470,15 @@
 
       $('#countryFilter').addEventListener('change', async e => {
         selectedCountryFilter = e.target.value;
-        if (selectedCountryFilter) highlightedCountry = selectedCountryFilter;
+        highlightedCountry = selectedCountryFilter || '';
         await loadMapLayer();
-        if (selectedCountryFilter) presentCountry(selectedCountryFilter);
-        else { map.closePopup(); closeSheet(); }
+        if (selectedCountryFilter){
+          presentCountry(selectedCountryFilter);
+        } else {
+          map.closePopup();
+          closeSheet();
+          focusActiveByNiche();
+        }
         if (USE_SHEET) setDrawer(false);
       });
 
@@ -454,19 +534,33 @@
       const input = $('#articleSearch');
       const clear = $('#clearSearch');
       if (!input) return;
-      input.addEventListener('input', ()=>{
+      const updateClear = () => {
+        if (!clear) return;
+        const hasValue = input.value.trim().length > 0;
+        clear.classList.toggle('is-visible', hasValue);
+      };
+      const applyQuery = () => {
         searchQuery = input.value.trim().toLowerCase();
         loadMapLayer();
         if (USE_SHEET) setDrawer(false);
+        updateClear();
+      };
+      input.addEventListener('input', ()=>{
+        applyQuery();
       });
-      clear.addEventListener('click', ()=>{
-        if (!input.value) return;
-        input.value='';
-        searchQuery='';
-        loadMapLayer();
-        if (USE_SHEET) setDrawer(false);
-        input.focus();
-      });
+      input.addEventListener('search', applyQuery);
+      if (clear){
+        clear.addEventListener('click', ()=>{
+          if (!input.value) return;
+          input.value='';
+          searchQuery='';
+          loadMapLayer();
+          if (USE_SHEET) setDrawer(false);
+          input.focus();
+          updateClear();
+        });
+      }
+      updateClear();
     }
 
     function setupDatePickers(){
@@ -495,6 +589,22 @@
       });
       $('#dateFrom').addEventListener('change', ()=> changeHandler(dateFromPicker.selectedDates, '', dateFromPicker));
       $('#dateTo').addEventListener('change', ()=> changeHandler(dateToPicker.selectedDates, '', dateToPicker));
+      document.querySelectorAll('.date-clear').forEach(btn => {
+        btn.addEventListener('click', (ev)=>{
+          ev.preventDefault();
+          ev.stopPropagation();
+          const target = btn.dataset.target;
+          if (target === 'dateFrom'){
+            dateFromPicker.clear();
+            changeHandler([], '', dateFromPicker);
+          } else if (target === 'dateTo'){
+            dateToPicker.clear();
+            changeHandler([], '', dateToPicker);
+          }
+          const input = document.getElementById(target);
+          input?.focus();
+        });
+      });
     }
 
     function filterArticles(country){
@@ -651,24 +761,30 @@
 
     function popupHTML(country, articles, onlyFirst){
       const shown = onlyFirst ? articles.slice(0,1) : articles;
+      const actions = [];
+      if (articles.length > 1){
+        if (onlyFirst){
+          actions.push(`<button type="button" class="btn primary js-more" data-country="${country}" onclick="NN_more(event,this)">Rodyti daugiau</button>`);
+        } else {
+          actions.push(`<button type="button" class="btn ghost js-back" data-country="${country}" onclick="NN_back(event,this)">← Grįžti</button>`);
+        }
+      }
+      actions.push(`<button type="button" class="btn ghost js-close-card" onclick="NN_closePopup()">Uždaryti</button>`);
       return `
         <div class="popup-card">
           <div class="popup-header">
             <div class="popup-flag"><i class="fa-solid fa-location-dot"></i></div>
             <div class="popup-title">${country}</div>
             <div class="popup-count">${articles.length} straipsniai</div>
+            <button type="button" class="popup-close" aria-label="Uždaryti kortelę" onclick="NN_closePopup()">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
           </div>
           <div class="popup-list">
             ${buildArticlesHTML(shown)}
           </div>
           <div class="popup-actions">
-            ${
-              onlyFirst && articles.length > 1
-                ? `<button type="button" class="btn primary js-more" data-country="${country}" onclick="NN_more(event,this)">Rodyti daugiau</button>`
-                : articles.length > 1
-                  ? `<button type="button" class="btn ghost js-back" data-country="${country}" onclick="NN_back(event,this)">← Grįžti</button>`
-                  : ''
-            }
+            ${actions.join('')}
           </div>
         </div>`;
     }
@@ -683,6 +799,21 @@
             ${a.summary ? `<div class="summary">${a.summary}</div>` : ``}
           </div>
         </div>`).join("");
+    }
+
+    function renderSheetControls(country, { expanded=false } = {}){
+      if (!sheetActions) return;
+      const total = filterArticles(country).length;
+      const buttons = [];
+      if (total > 1){
+        if (expanded){
+          buttons.push(`<button type="button" class="btn ghost" data-action="back" data-country="${country}">← Grįžti</button>`);
+        } else {
+          buttons.push(`<button type="button" class="btn primary" data-action="more" data-country="${country}">Rodyti daugiau</button>`);
+        }
+      }
+      buttons.push(`<button type="button" class="btn ghost" data-action="close" data-country="${country}">Uždaryti</button>`);
+      sheetActions.innerHTML = buttons.join('');
     }
 
     function presentCountry(country, { focus=true } = {}){
@@ -706,9 +837,7 @@
       if (USE_SHEET){
         const first = articles.slice(0,1);
         openSheet(buildArticlesHTML(first), country, articles.length);
-        sheetActions.innerHTML = articles.length>1
-          ? `<button type="button" class="btn primary" data-action="more" data-country="${country}">Rodyti daugiau</button>`
-          : '';
+        renderSheetControls(country, { expanded:false });
       } else {
         const popup = L.popup({ maxWidth: 820, minWidth: 380, className: 'nn-popup', closeOnClick:false, autoPanPaddingTopLeft:[28,28], autoPanPaddingBottomRight:[28,84] })
           .setLatLng(layer.getBounds().getCenter())
@@ -763,19 +892,22 @@
       if (action==='more'){
         const all = filterArticles(country);
         sheetBody.innerHTML = buildArticlesHTML(all);
-        sheetActions.innerHTML = all.length>1
-          ? `<button type="button" class="btn ghost" data-action="back" data-country="${country}">← Grįžti</button>`
-          : '';
+        renderSheetControls(country, { expanded:true });
         sheetBody.scrollTop = 0;
       } else if (action==='back'){
         const first = filterArticles(country).slice(0,1);
         sheetBody.innerHTML = buildArticlesHTML(first);
-        sheetActions.innerHTML = filterArticles(country).length>1
-          ? `<button type="button" class="btn primary" data-action="more" data-country="${country}">Rodyti daugiau</button>`
-          : '';
+        renderSheetControls(country, { expanded:false });
         sheetBody.scrollTop = 0;
+      } else if (action==='close'){
+        NN_closePopup();
       }
     }, true);
   </script>
+  <script type="text/javascript">
+    var infolinks_pid = 3440742;
+    var infolinks_wsid = 0;
+  </script>
+  <script type="text/javascript" src="//resources.infolinks.com/js/infolinks_main.js"></script>
 </body>
 </html>
