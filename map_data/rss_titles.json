@@ -70,5 +70,9 @@
   "Ekonomika": {
     "title_ai_en": "Ekonomika",
     "title_native": "Ekonomika"
+  },
+  "Blockchain": {
+    "title_ai_en": "Blockchain",
+    "title_native": "Blockchain"
   }
 }
