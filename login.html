@@ -60,11 +60,21 @@
     .topic-item .x{background:#3d1c22;color:#ffd3d8;border:1px solid #4a232a;padding:6px 8px;border-radius:8px;cursor:pointer}
 
     .muted{color:var(--muted);font-size:.9rem}
-    .msg{margin-top:8px;padding:10px 12px;border-radius:10px;border:1px solid var(--stroke);display:none}
-    .msg.ok{display:block;background:#0e1b15;color:#baffd5;border-color:#173c2e}
-    .msg.err{display:block;background:#211217;color:#ffd0d7;border-color:#3b1b25}
+    .msg{margin-top:8px;padding:10px 12px;border-radius:10px;border:1px solid var(--stroke);display:none;align-items:center;gap:8px;font-size:.9rem}
+    .msg.ok{display:flex;background:#0e1b15;color:#baffd5;border-color:#173c2e}
+    .msg.err{display:flex;background:#211217;color:#ffd0d7;border-color:#3b1b25}
+
+    .alert{margin:16px 0;padding:12px 14px;border-radius:12px;border:1px solid var(--stroke);display:none;align-items:center;gap:10px;font-weight:700}
+    .alert.ok{display:flex;background:#0e1b15;color:#9ff4c7;border-color:#173c2e}
+    .alert.err{display:flex;background:#211217;color:#ffb8c1;border-color:#3b1b25}
+    .alert i{font-size:1.1rem}
 
     .loading{opacity:.6;pointer-events:none;filter:grayscale(.2)}
+
+    .selected-summary{margin-top:12px;padding-top:12px;border-top:1px solid rgba(18,30,44,.6)}
+    .selected-summary h4{margin:0 0 10px;font-size:.95rem;color:#dff6ff}
+    .summary-chips{display:flex;flex-wrap:wrap;gap:8px}
+    .summary-chips .chip{cursor:default}
   </style>
 </head>
 <body>
@@ -75,6 +85,7 @@
 </header>
 
 <main class="wrap">
+  <div id="authAlert" class="alert" role="status" aria-live="polite"></div>
   <section class="card" id="card">
     <!-- LEFT: auth -->
     <div id="leftCol">
@@ -141,6 +152,10 @@
           </div>
           <button class="btn danger" id="logoutBtn">Atsijungti</button>
         </div>
+        <div class="selected-summary" id="selectedSummaryWrap">
+          <h4>Mano nišos</h4>
+          <div id="selectedSummary" class="summary-chips"></div>
+        </div>
       </div>
 
       <div class="box" style="margin-bottom:14px">
@@ -203,9 +218,37 @@
   // ---- Helpers ----
   const $ = s => document.querySelector(s);
   const show = (el, v=true)=> el.style.display = v ? "" : "none";
-  const setMsg = (el, text, ok=false)=>{ el.textContent = text; el.className = "msg " + (ok ? "ok" : "err"); el.style.display = "block"; };
-  const clearMsg = el => { el.textContent=""; el.className="msg"; el.style.display="none"; }
+  const setMsg = (el, text, ok=false)=>{
+    if (!el) return;
+    el.className = "msg " + (ok ? "ok" : "err");
+    el.innerHTML = "";
+    const icon = document.createElement('i');
+    icon.className = 'fa-solid ' + (ok ? 'fa-circle-check' : 'fa-circle-exclamation');
+    const span = document.createElement('span');
+    span.textContent = text;
+    el.append(icon, span);
+    el.style.display = "flex";
+  };
+  const clearMsg = el => { if (!el) return; el.innerHTML=""; el.className="msg"; el.style.display="none"; };
   const setLoading = (on)=> $("#card").classList.toggle("loading", !!on);
+  const alertBox = $("#authAlert");
+  const showAlert = (text="", ok=true)=>{
+    if (!alertBox) return;
+    if (!text){
+      alertBox.style.display = "none";
+      alertBox.textContent = "";
+      alertBox.className = "alert";
+      return;
+    }
+    alertBox.className = "alert " + (ok ? "ok" : "err");
+    alertBox.innerHTML = "";
+    const icon = document.createElement('i');
+    icon.className = 'fa-solid ' + (ok ? 'fa-circle-check' : 'fa-circle-exclamation');
+    const span = document.createElement('span');
+    span.textContent = text;
+    alertBox.append(icon, span);
+    alertBox.style.display = "flex";
+  };
 
   function togglePwd(id){ const i=$("#"+id); i.type = i.type === "password" ? "text" : "password"; }
   document.querySelectorAll("[data-toggle]").forEach(btn=>{
@@ -245,6 +288,7 @@
         } else {
           selectedNiches = selectedNiches.filter(x=>x!==n);
         }
+        renderSelectedSummary();
       };
       box.appendChild(b);
     });
@@ -252,6 +296,26 @@
     if (!box.children.length){
       const p=document.createElement('p'); p.className='muted'; p.textContent='Nerasta nišų pagal paiešką.'; box.appendChild(p);
     }
+    renderSelectedSummary();
+  }
+
+  function renderSelectedSummary(){
+    const wrap = $("#selectedSummary");
+    if (!wrap) return;
+    wrap.innerHTML = "";
+    if (!selectedNiches.length){
+      const p = document.createElement('p');
+      p.className = 'muted';
+      p.textContent = 'Dar nepasirinkote nišų.';
+      wrap.appendChild(p);
+      return;
+    }
+    selectedNiches.forEach(n=>{
+      const chip = document.createElement('span');
+      chip.className = 'chip active';
+      chip.textContent = n;
+      wrap.appendChild(chip);
+    });
   }
 
   $("#nicheSearch").addEventListener('input', (e)=>{ nichesFilter = e.target.value; renderNiches(selectedNiches); });
@@ -292,31 +356,36 @@
 
   // ---- Auth actions ----
   $("#loginBtn").onclick = async ()=>{
-    clearMsg($("#msgLogin"));
+    const msg = $("#msgLogin");
+    clearMsg(msg);
+    showAlert();
     const email = $("#emailLogin").value.trim();
     const pass  = $("#passwordLogin").value;
-    if (!email || !pass){ setMsg($("#msgLogin"), "Užpildykite el. paštą ir slaptažodį"); return; }
+    if (!email || !pass){ setMsg(msg, "Užpildykite el. paštą ir slaptažodį"); return; }
     setLoading(true);
     try{
       await auth.signInWithEmailAndPassword(email, pass);
-      setMsg($("#msgLogin"), "Prisijungta!", true);
-    }catch(e){ setMsg($("#msgLogin"), e.message); }
+      clearMsg(msg);
+      showAlert('Prisijungėte sėkmingai!', true);
+    }catch(e){ setMsg(msg, e.message); }
     setLoading(false);
   };
   $("#registerBtn").onclick = async ()=>{
-    clearMsg($("#msgReg"));
+    const msg = $("#msgReg");
+    clearMsg(msg);
+    showAlert();
     const email = $("#emailReg").value.trim();
     const pass  = $("#passwordReg").value;
     const conf  = $("#confirmReg").value;
-    if (!email || !pass || !conf){ setMsg($("#msgReg"), "Užpildykite visus laukus"); return; }
-    if (pass.length < 6){ setMsg($("#msgReg"), "Slaptažodis per trumpas (min. 6)"); return; }
-    if (pass !== conf){ setMsg($("#msgReg"), "Slaptažodžiai nesutampa"); return; }
+    if (!email || !pass || !conf){ setMsg(msg, "Užpildykite visus laukus"); return; }
+    if (pass.length < 6){ setMsg(msg, "Slaptažodis per trumpas (min. 6)"); return; }
+    if (pass !== conf){ setMsg(msg, "Slaptažodžiai nesutampa"); return; }
     setLoading(true);
     try{
       await auth.createUserWithEmailAndPassword(email, pass);
-      setMsg($("#msgReg"), "Registracija sėkminga!", true);
-      document.getElementById("tabLogin").click();
-    }catch(e){ setMsg($("#msgReg"), e.message); }
+      setMsg(msg, "Registracija sėkminga!", true);
+      showAlert('Registracija sėkminga! Prisijungėte automatiškai.', true);
+    }catch(e){ setMsg(msg, e.message); }
     setLoading(false);
   };
   $("#forgotBtn").onclick = async ()=>{
@@ -327,7 +396,14 @@
     catch(e){ setMsg($("#msgLogin"), e.message); }
     setLoading(false);
   };
-  $("#logoutBtn").onclick = ()=> auth.signOut();
+  $("#logoutBtn").onclick = async ()=>{
+    try{
+      await auth.signOut();
+      showAlert('Atsijungėte.', true);
+    }catch(e){
+      showAlert('Nepavyko atsijungti: ' + e.message, false);
+    }
+  };
 
   // Save button handler
   document.getElementById("saveBtn").onclick = async ()=>{
@@ -396,5 +472,10 @@
     renderNiches([]);
   });
 </script>
+  <script type="text/javascript">
+    var infolinks_pid = 3440742;
+    var infolinks_wsid = 0;
+  </script>
+  <script type="text/javascript" src="//resources.infolinks.com/js/infolinks_main.js"></script>
 </body>
 </html>
