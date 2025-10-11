@@ -2,5 +2,9 @@
   "Politika": [
     "https://feeds.bbci.co.uk/news/politics/rss.xml",
     "https://www.politico.eu/feed/"
+  ],
+  "Blockchain": [
+    "https://forkast.news/feed/",
+    "https://www.ledgerinsights.com/feed/"
   ]
 }
