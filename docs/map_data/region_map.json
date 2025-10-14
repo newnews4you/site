@@ -212,15 +212,6 @@
       "summary": "After President Trump held talks with President Vladimir V. Putin, he said the Russian leader would be willing to meet with Ukraine’s president. That seems less and less likely.",
       "category": "Politika",
       "niche": "Politika"
-    },
-    {
-      "title": "Trumpas gali kalbėtis su Putinu apie Tomahawk raketų siuntimą į Ukrainą, siekiant baigti karą.",
-      "url": "../naujienos/2025-10-13-62971c.html",
-      "image": "https://images.pexels.com/photos/12325254/pexels-photo-12325254.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      "date": "2025-10-13",
-      "summary": "Trumpas gali kalbėtis su Putinu apie Tomahawk raketų siuntimą į Ukrainą, siekiant baigti karą. Niša: Politika. Šaltinis: www.politico.com.",
-      "category": "Politika",
-      "niche": "Politika"
     }
   ],
   "Israel": [
@@ -250,15 +241,6 @@
       "summary": "Israel's prime minister says his country \"deeply regrets\" attacks by Israeli forces on the Nasser Hospital in Khan Younis, which killed at least 20 Palestinians including five journalists.\n\nThe statement came amid growing condemnation of the incident, with leaders from around the world expressing sh",
       "category": "Sportas",
       "niche": "Sportas"
-    },
-    {
-      "title": "Universitetai turi kovoti su antisemitizmu, sako švietimo sekretorė Phillipson.",
-      "url": "../naujienos/2025-10-13-7365f0.html",
-      "image": "https://images.pexels.com/photos/28993699/pexels-photo-28993699.png?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      "date": "2025-10-13",
-      "summary": "Bridget Phillipson sako, kad nepriimtina, jog žydų studentai jaučiasi priversti slėpti savo tapatybę universitete. Universitetai turi imtis veiksmų, kad apsaugotų žydų studentus nuo priekabiavimo ir diskriminacijos, teigė švietimo sekretorė Bridget Phillipson, pristatydama priemones kovai su antisem",
-      "category": "Politika",
-      "niche": "Politika"
     }
   ],
   "Turkey": [
@@ -591,7 +573,7 @@
       "niche": "Politika"
     }
   ],
-  "United States of America": [
+  "United States": [
     {
       "title": "Trumpo puolimas prieš FED sukėlė nerimą Europoje dėl ekonominio stabilumo",
       "url": "../naujienos/2025-08-26-17cf2c.html",
@@ -657,10 +639,10 @@
     },
     {
       "title": "Ten sisteminės svarbos bankai bendradarbiauja stabiliosios monetos iniciatyvoje.",
-      "url": "../naujienos/2025-10-13-934918.html",
+      "url": "../naujienos/2025-10-14-934918.html",
       "image": "https://images.pexels.com/photos/18066309/pexels-photo-18066309.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      "date": "2025-10-13",
-      "summary": "Dešimt didžiausių pasaulio bankų planuoja pristatyti rezervais paremto skaitmeninio pinigų žetonus, kad būtų galima atlikti mokėjimus viešuose blokų grandinėse G7 valiutomis. Tarp bankų yra Banco Santander, Bank of America, Barclays, BNP Paribas, Citi, Deutsche Bank, Goldman Sachs, MUFG Bank, TD Ban",
+      "date": "2025-10-14",
+      "summary": "Dešimt didžiausių pasaulio bankų planuoja pristatyti rezervais paremto skaitmeninio pinigų žetono sistemą, kad būtų galima atlikti mokėjimus viešosiose blokų grandinėse G7 valiutomis. Tarp bankų yra Banco Santander, Bank of America, Barclays, BNP Paribas, Citi, Deutsche Bank, Goldman Sachs, MUFG Ban",
       "category": "Blockchain",
       "niche": "Blockchain"
     }
@@ -727,6 +709,26 @@
       "image": "https://images.pexels.com/photos/7103041/pexels-photo-7103041.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
       "date": "2025-09-01",
       "summary": "NEW DELHI: The Army on Monday dismantled a stage erected by the Trinamool Congress near the Gandhi statue in Kolkataâs Maidan, where the party had been protesting alleged atrocities on Bengali-speaking migrant workers.A defence official told PTI that the Army (Local military Authority, Kolkata) us",
+      "category": "Politika",
+      "niche": "Politika"
+    },
+    {
+      "title": "Povelas nepriėmė jokių sprendimų dėl įrodymų Kinijos šnipinėjimo byloje, sako ministras.",
+      "url": "../naujienos/2025-10-14-cb0f7a.html",
+      "image": "https://images.pexels.com/photos/29670897/pexels-photo-29670897.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "date": "2025-10-14",
+      "summary": "Povelas nepriėmė sprendimų dėl įrodymų Kinijos šnipinėjimo byloje, sako ministras Vyriausybės nacionalinio saugumo patarėjas Jonathan Powell nepriėmė sprendimų dėl jokio įrodymo turinio žlugusioje byloje prieš du vyrus, kaltinamus šnipinėjimu už Kiniją, teigė ministras. Prokurorai netikėtai atšaukė ",
+      "category": "Politika",
+      "niche": "Politika"
+    }
+  ],
+  "Belgium": [
+    {
+      "title": "2026 metų biudžeto įstatymo projektas: viskas, ką nusprendė Lecornu mokesčių srityje",
+      "url": "../naujienos/2025-10-14-4103cf.html",
+      "image": "https://images.pexels.com/photos/7948104/pexels-photo-7948104.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "date": "2025-10-14",
+      "summary": "Vykdomoji valdžia taip pat pristato priemonę, turinčią užtikrinti, kad turtingieji prisidėtų (3 straipsnis), kuri, be abejo, turėtų tapti didžiausių diskusijų objektu Parlamente, jei vyriausybė iki to laiko išliks. Įvesta nauja mokestinė “už neoperacinius turtus, priklausančius turto holdingams”. To",
       "category": "Politika",
       "niche": "Politika"
     }
