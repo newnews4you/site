@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Regioninis straipsnių žemėlapis — Flat Dark</title>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
+
+
+  <!-- Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+
+  <style>
+    :root{
+      --bg:#0b0f14; --panel:#0f141b; --muted:#aab3c0; --text:#eaf0f7;
+      --brand:#49c6ff; --inactive:#1a2431; --stroke:#1b2432;
+      --radius:14px; --shadow:0 10px 40px rgba(0,0,0,.45); --navH:56px;
+
+      /* popup paletė */
+      --popupBg:#0d131c; --popupHdr:#111a26;
+      --popupStroke:#1a2636; --popupSoft:#9fb3c9;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font:16px/1.45 "Inter",system-ui,-apple-system,Segoe UI,Roboto}
+    a{color:inherit;text-decoration:none}
+    .leaflet-container{background:var(--bg)}
+
+    /* NAV */
+    .nav{height:var(--navH);position:sticky;top:0;z-index:70;display:flex;align-items:center;gap:12px;padding:0 12px;border-bottom:1px solid #121826;background:rgba(10,13,18,.72);backdrop-filter:blur(6px)}
+    .brand{display:flex;gap:10px;align-items:center;font-weight:800}
+    .brand i{color:var(--brand)}
+    .nav-links{display:flex;gap:12px;align-items:center;font-size:.9rem;color:#a7bed6}
+    .nav-links a{padding:6px 10px;border-radius:999px;border:1px solid transparent;transition:color .15s ease,background .15s ease,border-color .15s ease}
+    .nav-links a:hover,.nav-links a:focus-visible{color:#e8f6ff;background:rgba(73,198,255,.14);border-color:rgba(73,198,255,.32)}
+    .spacer{flex:1}
+    .hamburger{display:none;width:38px;height:38px;border-radius:10px;border:1px solid #121826;background:#0c1118;color:#cfeeff;cursor:pointer}
+    .account{padding:8px 12px;border-radius:999px;border:1px solid #121826;background:#0c1118;color:#cfeeff;font-weight:700}
+
+    /* LAYOUT */
+    .wrap{display:grid;grid-template-columns:300px 1fr;gap:14px;padding:12px}
+    .panel{background:var(--panel);border:1px solid #121826;border-radius:var(--radius);box-shadow:var(--shadow)}
+
+    /* SIDEBAR */
+    .sidebar{padding:14px;display:flex;flex-direction:column;gap:18px;min-height:calc(100vh - var(--navH) - 24px)}
+    .block h3{margin:0 0 10px;font-size:.95rem;color:#dff6ff}
+    #nicheBar{display:flex;flex-wrap:wrap;gap:8px;max-height:240px;overflow:auto;padding-bottom:2px}
+    #nicheBar .chip{border:1px solid #121826;background:#101725;color:var(--muted);padding:8px 12px;border-radius:999px;font-size:.9rem;cursor:pointer;white-space:nowrap}
+    #nicheBar .chip.active{background:#49c6ff;color:#07121a;border-color:transparent;font-weight:700}
+    .field{display:flex;flex-direction:column;gap:6px}
+    .field select,.field input{background:#0e131d;border:1px solid #121826;color:var(--text);padding:10px 12px;border-radius:10px}
+    .date-field{gap:6px}
+    .date-field .date-input{position:relative;display:flex;align-items:center}
+    .date-field input{width:100%;padding-right:36px}
+    .date-clear{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:none;background:transparent;color:#89a7c5;cursor:pointer;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;transition:background .15s ease,color .15s ease}
+    .date-clear:hover,.date-clear:focus-visible{background:rgba(20,30,44,.7);color:#d6e9ff}
+
+    /* MAP */
+    .map-card{position:relative;min-height:calc(100vh - var(--navH) - 24px);padding:16px 16px 16px;display:flex;flex-direction:column;gap:12px}
+    .map-toolbar{display:flex;flex-direction:column;gap:8px}
+    .toolbar-label{font-size:.85rem;color:#cdeaff;text-transform:uppercase;letter-spacing:.8px}
+    .toolbar-search{display:flex;align-items:center;gap:10px;background:#0b141f;border:1px solid #121826;border-radius:12px;padding:10px 12px;color:#9fb6ce}
+    .toolbar-search i{color:#6fbfff}
+    .toolbar-search input{flex:1 1 auto;min-width:0;background:transparent;border:none;outline:none;color:#fff;font-size:.95rem;appearance:none;-webkit-appearance:none;padding:0}
+    .toolbar-search input::-webkit-search-cancel-button{display:none}
+    .toolbar-search button{border:none;background:rgba(15,23,35,.8);color:#9fb6ce;border-radius:8px;width:32px;height:32px;display:grid;place-items:center;cursor:pointer;transition:background .15s ease,color .15s ease,opacity .15s ease,transform .15s ease;opacity:0;pointer-events:none;transform:scale(.85)}
+    .toolbar-search button:hover{background:#122032;color:#d8f3ff}
+    .toolbar-search button.is-visible{opacity:1;pointer-events:auto;transform:scale(1)}
+    .map-frame{position:relative;flex:1;border-radius:12px;border:1px solid #121826;overflow:hidden;background:#05080c}
+    #map{position:absolute;inset:0;height:100%;width:100%}
+
+    /* OVERLAYS */
+    .overlay{position:absolute;left:12px;top:12px;z-index:400;display:flex;gap:8px;flex-wrap:wrap;pointer-events:none}
+    .overlay .pill{pointer-events:auto}
+    .pill{display:flex;gap:8px;align-items:center;background:rgba(8,12,18,.76);backdrop-filter:blur(4px);border:1px solid #121826;border-radius:999px;padding:8px 12px;font-size:.9rem;color:#cfe5ff}
+    .reset-wrapper{position:absolute;right:12px;top:12px;z-index:410;display:flex;gap:8px}
+    .reset-wrapper button{border:none;background:rgba(8,12,18,.76);color:#9fb6ce;border:1px solid #121826;border-radius:10px;width:38px;height:38px;display:grid;place-items:center;cursor:pointer;transition:background .15s ease,color .15s ease}
+    .reset-wrapper button:hover,.reset-wrapper button:focus-visible{background:rgba(14,22,34,.85);color:#e7f6ff}
+    .legend{position:absolute;left:12px;bottom:12px;z-index:400;display:flex;gap:12px;align-items:center;background:rgba(8,12,18,.76);border:1px solid #121826;padding:6px 10px;border-radius:999px;font-size:.9rem;color:#cfe5ff;pointer-events:none}
+    .box{width:16px;height:12px;border-radius:3px;border:1px solid #1c2432;display:inline-block}
+    .active{background:#49c6ff}.inactive{background:#111a25}
+
+    /* ===== DESKTOP POPUP (refined) ===== */
+    .leaflet-container a{color:#cfe5ff}
+    .leaflet-popup-content-wrapper{
+      background:var(--popupBg);
+      color:#eaf3ff;
+      border:1px solid var(--popupStroke);
+      border-radius:16px;
+      box-shadow:0 18px 60px rgba(0,0,0,.55), inset 0 3px 0 rgba(73,198,255,.18);
+      overflow:visible;            /* kad sticky dalys nebūtų „nukirstos“ */
+    }
+    .leaflet-popup-tip{background:var(--popupBg);border:1px solid var(--popupStroke)}
+    .popup-card{width:min(780px,92vw);max-height:72vh;display:flex;flex-direction:column}
+    .popup-header{
+      position:sticky;top:0;display:flex;align-items:center;gap:12px;
+      background:linear-gradient(180deg, rgba(17,26,38,.98), rgba(17,26,38,.92));
+      backdrop-filter:blur(4px);
+      padding:14px 16px;margin:0;border-bottom:1px solid var(--popupStroke);
+      border-radius:14px 14px 0 0
+    }
+    .popup-flag{width:28px;height:28px;border-radius:8px;background:#0f1926;border:1px solid var(--popupStroke);display:grid;place-items:center;flex:0 0 auto}
+    .popup-flag i{color:var(--brand)}
+    .popup-title{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .popup-count{margin-left:auto;font-size:.85rem;color:var(--popupSoft);background:#0f1a27;border:1px solid var(--popupStroke);border-radius:999px;padding:6px 10px}
+    .popup-close{border:none;background:transparent;color:#91bbd9;cursor:pointer;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;margin-left:4px;transition:background .15s ease,color .15s ease}
+    .popup-close:hover,.popup-close:focus-visible{background:rgba(14,22,35,.7);color:#e5f5ff}
+    .popup-list{
+      overflow:auto;
+      padding:10px 16px 88px;  /* apačioje vieta veiksmų juostai */
+      scrollbar-width:thin;
+    }
+    .popup-list::-webkit-scrollbar{height:8px;width:8px}
+    .popup-list::-webkit-scrollbar-thumb{background:#1b2a3e;border-radius:6px}
+    .article{
+      display:grid;grid-template-columns:96px 1fr;gap:14px;
+      padding:12px;border:1px solid #1e2a3a;border-radius:12px;
+      background:#0d1622; margin:10px 0;
+      transition:transform .12s ease, border-color .12s ease, background .12s ease;
+    }
+    .article:hover{transform:translateY(-1px);border-color:#253549;background:#0e1a28}
+    .thumb{width:96px;height:96px;border-radius:12px;border:1px solid #1a2a40;object-fit:cover;background:#0c1220}
+    .meta{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .meta .title a{font-weight:750;line-height:1.22}
+    .meta .title a:hover{text-decoration:underline}
+    .row{display:flex;gap:10px;align-items:center;font-size:.84rem;color:#a9b6c9;flex-wrap:wrap}
+    .badge{padding:3px 8px;border-radius:999px;background:#0f1a27;border:1px solid #1b2b40;font-size:.78rem}
+    .summary{font-size:.94rem;color:#d7dfe9;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .popup-actions{
+      position:sticky;bottom:0;display:flex;gap:8px;justify-content:flex-end;
+      background:linear-gradient(to top, rgba(13,19,28,1), rgba(13,19,28,0.75), rgba(13,19,28,0));
+      padding:12px 16px;margin:0;border-top:1px solid var(--popupStroke)
+    }
+    .btn{border:none;border-radius:10px;padding:10px 14px;cursor:pointer;font-weight:800;letter-spacing:.2px}
+    .btn.primary{background:linear-gradient(180deg,#58ceff,#39b8ff);color:#05131d}
+    .btn.ghost{background:#0f1a27;color:#dff6ff;border:1px solid #1a2334}
+
+    /* MOBILE */
+    @media (max-width: 900px){
+      .hamburger{display:flex}
+      .nav-links{display:none}
+      .wrap{grid-template-columns:1fr}
+      #drawerBackdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:900;display:none}
+      .drawer-open #drawerBackdrop{display:block}
+      .sidebar{
+        position:fixed;left:12px;top:calc(var(--navH) + 12px);z-index:950;
+        width:min(86vw,380px);transform:translateX(-120%);transition:transform .2s ease;
+        box-shadow:0 20px 60px rgba(0,0,0,.55)
+      }
+      .sidebar.open{transform:translateX(0)}
+      .drawer-open .overlay,.drawer-open .leaflet-control-container{opacity:0;pointer-events:none}
+      .leaflet-popup{display:none !important}
+      #nicheBar{flex-wrap:nowrap;overflow-x:auto;padding-bottom:8px}
+      #nicheBar .chip{flex:0 0 auto}
+      .map-card{padding:16px 12px 12px}
+      .map-toolbar{position:sticky;top:0;z-index:410;background:linear-gradient(180deg,rgba(11,15,20,.95),rgba(11,15,20,.75));padding-bottom:12px}
+      .account{position:fixed;right:16px;bottom:16px;z-index:960;box-shadow:0 12px 30px rgba(0,0,0,.5)}
+    }
+
+    @media (max-width: 520px){
+      .toolbar-search{gap:8px;padding:8px 10px}
+      .toolbar-search button{width:28px;height:28px}
+    }
+
+    /* BOTTOM SHEET (mobile) */
+    .sheet-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;display:none}
+    .sheet{position:fixed;left:0;right:0;bottom:0;z-index:1001;background:var(--popupBg);border-top:1px solid var(--popupStroke);border-radius:16px 16px 0 0;max-height:90vh;transform:translateY(100%);transition:transform .22s ease;box-shadow:0 -18px 50px rgba(0,0,0,.6)}
+    .sheet.open{transform:translateY(0)}
+    .sheet-backdrop.open{display:block}
+    .sheet-header{position:sticky;top:0;background:var(--popupHdr);border-bottom:1px solid var(--popupStroke);padding:12px 14px;display:flex;align-items:center;gap:10px;border-radius:16px 16px 0 0}
+    .sheet-title{font-weight:800}
+    .sheet-count{font-size:.85rem;color:var(--popupSoft);background:#0f1a27;border:1px solid var(--popupStroke);border-radius:999px;padding:6px 10px;margin-left:auto}
+    .sheet-close{border:none;background:transparent;color:#91bbd9;cursor:pointer;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;margin-left:4px;transition:background .15s ease,color .15s ease}
+    .sheet-close:hover,.sheet-close:focus-visible{background:rgba(14,22,35,.7);color:#e5f5ff}
+    .sheet-body{
+      padding:10px 14px 88px;  /* apačioje vieta veiksmų juostai */
+      overflow:auto;
+      max-height:calc(90vh - 56px - 58px);
+    }
+    .sheet-actions{position:sticky;bottom:0;padding:10px 14px;display:flex;gap:8px;justify-content:flex-end;background:linear-gradient(to top, rgba(13,19,28,1), rgba(13,19,28,0));border-top:1px solid var(--popupStroke)}
+    .sheet .article{display:grid;grid-template-columns:1fr;gap:8px;padding:10px 0;border-bottom:1px dashed #1a2340}
+    .sheet .thumb{width:100%;height:160px}
+  </style>
+</head>
+<body>
+  <div id="drawerBackdrop"></div>
+
+  <header class="nav">
+    <button class="hamburger" id="toggleSidebar" aria-label="Meniu"><i class="fa-solid fa-bars"></i></button>
+    <div class="brand"><i class="fa-solid fa-globe"></i> NewNews4You</div>
+    <nav class="nav-links" aria-label="Pagalbinės nuorodos">
+      <a href="../about.html">Apie mus</a>
+      <a href="../privacy.html">Privatumo politika</a>
+      <a href="../contact.html">Kontaktai</a>
+    </nav>
+    <div class="spacer"></div>
+    <a href="../login.html" class="account">Mano paskyra</a>
+  </header>
+
+  <main class="wrap">
+    <aside class="panel sidebar" id="sidebar">
+      <section class="block">
+        <h3>Kategorijos</h3>
+        <div id="nicheBar"></div>
+      </section>
+      <section class="block">
+        <h3>Filtrai</h3>
+        <div class="field"><label for="countryFilter">Šalis</label><select id="countryFilter"></select></div>
+        <div class="field date-field">
+          <label for="dateFrom">Nuo</label>
+          <div class="date-input">
+            <input type="text" id="dateFrom" placeholder="Pasirinkite datą" />
+            <button type="button" class="date-clear" data-target="dateFrom" aria-label="Išvalyti datą">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        </div>
+        <div class="field date-field">
+          <label for="dateTo">Iki</label>
+          <div class="date-input">
+            <input type="text" id="dateTo" placeholder="Pasirinkite datą" />
+            <button type="button" class="date-clear" data-target="dateTo" aria-label="Išvalyti datą">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+    </aside>
+
+    <section class="panel map-card">
+      <div class="map-toolbar">
+        <label class="toolbar-label" for="articleSearch">Paieška straipsniuose</label>
+        <div class="toolbar-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="search" id="articleSearch" placeholder="Ieškoti pagal pavadinimą ar santrauką..." autocomplete="off" />
+          <button type="button" id="clearSearch" aria-label="Išvalyti paiešką" title="Išvalyti paiešką">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <div class="map-frame">
+        <div class="overlay">
+          <div class="pill"><i class="fa-regular fa-flag"></i><span id="activeCountries">0 šalys</span></div>
+          <div class="pill"><i class="fa-regular fa-file-lines"></i><span id="totalArticles">0 straipsnių</span></div>
+          <div class="pill"><i class="fa-regular fa-clock"></i><span id="lastUpdated">Atnaujinta šiandien</span></div>
+        </div>
+        <div class="reset-wrapper">
+          <button type="button" id="resetView" aria-label="Atstatyti žemėlapio mastelį" title="Atstatyti žemėlapio mastelį">
+            <i class="fa-solid fa-arrows-rotate"></i>
+          </button>
+        </div>
+        <div id="map"></div>
+        <div class="legend">
+          <span><span class="box active"></span> Yra straipsnių</span>
+          <span><span class="box inactive"></span> Nėra duomenų</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Mobile bottom sheet -->
+  <div class="sheet-backdrop" id="sheetBackdrop"></div>
+  <div class="sheet" id="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title" id="sheetTitle">Šalis</div>
+      <div class="sheet-count" id="sheetCount">0 straipsnių</div>
+      <button type="button" class="sheet-close" id="sheetClose" aria-label="Uždaryti kortelę">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="sheet-body" id="sheetBody"></div>
+    <div class="sheet-actions" id="sheetActions"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script>
+    /* Firebase */
+    const firebaseConfig = {
+      apiKey: "AIzaSyDzf4GlqlOEtCOYWdmpAz7n5BZvdb1QARg",
+      authDomain: "news4you-f0976.firebaseapp.com",
+      projectId: "news4you-f0976",
+      storageBucket: "news4you-f0976.firebasestorage.app",
+      messagingSenderId: "101311076335",
+      appId: "1:101311076335:web:bbd5e29306269902e1881a",
+      measurementId: "G-PTVWMT02K2"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db   = firebase.firestore();
+    const analytics = firebase.analytics();
+
+    auth.onAuthStateChanged(user => {
+      if (user) analytics.setUserId(user.uid); else analytics.setUserId(null);
+    });
+
+    /* State */
+    let map, geoJsonLayer, markerLayer;
+    let regionArticles = {};
+    let selectedCountryFilter = '';
+    let highlightedCountry = '';
+    let selectedNiche   = 'Visos';
+    let userNiches      = [];
+    let searchQuery     = '';
+    let worldGeoJSON    = null;
+    let dateFromPicker, dateToPicker;
+    let activeDateFrom = null;
+    let activeDateTo   = null;
+
+    const countryLayers  = new Map();
+    const countryMarkers = new Map();
+
+    const $ = s => document.querySelector(s);
+    const urlParam = k => new URL(location.href).searchParams.get(k);
+    const iso = d => new Date(d).toISOString().split('T')[0];
+    const fmt = d => new Date(d).toLocaleDateString('lt-LT',{year:'numeric',month:'short',day:'2-digit'});
+    const stripHTML = str => (str || '').replace(/<[^>]*>/g,' ');
+    const parseDateInput = value => {
+      if (!value) return null;
+      const d = new Date(value);
+      return Number.isNaN(d.getTime()) ? null : d;
+    };
+
+    const isMobileWidth = () => window.innerWidth <= 900;
+    let USE_SHEET = isMobileWidth();
+
+    const ZMIN = 2, ZMAX = 6, ZSTEP = 0.25;
+    const PADS = { paddingTopLeft:[28,28], paddingBottomRight:[28,84] };
+
+    function refreshActiveDates(){
+      activeDateFrom = parseDateInput($('#dateFrom')?.value);
+      activeDateTo   = parseDateInput($('#dateTo')?.value);
+    }
+
+    function refreshCountryStyles(){
+      if (geoJsonLayer) geoJsonLayer.setStyle(styleFor);
+    }
+
+    function refreshMarkerStyles(){
+      countryMarkers.forEach((marker, country)=>{
+        const active = highlightedCountry && highlightedCountry === country;
+        marker.setStyle({
+          radius: active ? 8 : 6,
+          color: active ? '#6fe2ff' : '#1c334a',
+          weight: active ? 2.5 : 2,
+          fillColor: active ? '#7de2ff' : '#49c6ff',
+          fillOpacity: active ? 1 : 0.85
+        });
+      });
+    }
+
+    function recheckModeAndReload(){
+      const prev = USE_SHEET;
+      USE_SHEET = isMobileWidth();
+      if (USE_SHEET !== prev){
+        try { map.closePopup(); } catch(_) {}
+        closeSheet();
+        loadMapLayer();
+      }
+    }
+
+    /* Drawer */
+    const toggleBtn = $('#toggleSidebar');
+    const sidebarEl = $('#sidebar');
+    const drawerBg  = $('#drawerBackdrop');
+    function setDrawer(open){
+      if (open) closeSheet();
+      sidebarEl.classList.toggle('open', open);
+      document.body.classList.toggle('drawer-open', open);
+      drawerBg.style.display = open ? 'block' : 'none';
+      setTimeout(()=> map?.invalidateSize(), 220);
+    }
+    toggleBtn.addEventListener('click', ()=> setDrawer(!sidebarEl.classList.contains('open')));
+    drawerBg.addEventListener('click', ()=> setDrawer(false));
+
+    /* Bottom sheet */
+    const sheet = $('#sheet'), sheetBg = $('#sheetBackdrop'), sheetBody = $('#sheetBody'), sheetActions = $('#sheetActions');
+    const sheetCloseBtn = $('#sheetClose');
+    const resetViewBtn = $('#resetView');
+    function openSheet(html, title, count){
+      sheetBody.innerHTML = html;
+      $('#sheetTitle').textContent = title;
+      $('#sheetCount').textContent = `${count} straipsniai`;
+      sheet.classList.add('open'); sheetBg.classList.add('open');
+      disableMap(true);
+    }
+    function closeSheet(){
+      sheet.classList.remove('open'); sheetBg.classList.remove('open');
+      sheetActions.innerHTML = '';
+      disableMap(false);
+    }
+    sheetBg.addEventListener('click', closeSheet);
+    sheetCloseBtn.addEventListener('click', closeSheet);
+    resetViewBtn?.addEventListener('click', (ev)=>{
+      ev.preventDefault();
+      ev.stopPropagation();
+      resetViewToAll();
+    });
+
+    function disableMap(disable){
+      if (!map) return;
+      const fn = disable ? 'disable' : 'enable';
+      map.dragging[fn](); map.scrollWheelZoom[fn](); map.doubleClickZoom[fn](); map.boxZoom[fn](); map.keyboard[fn]();
+      if (map.touchZoom) map.touchZoom[fn]();
+      if (map.tap) map.tap[fn]();
+    }
+
+    window.NN_closePopup = function(){
+      try { map.closePopup(); } catch (_) {}
+      closeSheet();
+      highlightedCountry = selectedCountryFilter || '';
+      refreshCountryStyles();
+      refreshMarkerStyles();
+    };
+
+    async function resetViewToAll(){
+      if (!map) return;
+      selectedCountryFilter = '';
+      highlightedCountry = '';
+      const select = $('#countryFilter');
+      if (select) select.value = '';
+      await loadMapLayer();
+      try { map.closePopup(); } catch(_) {}
+      closeSheet();
+      focusActiveByNiche();
+    }
+
+    function setupAnalyticsPing(){
+      if (typeof gtag !== 'undefined'){
+        gtag('event', 'site_open', { page_path: location.pathname });
+      } else if (analytics && analytics.logEvent){
+        analytics.logEvent('site_open', { page_path: location.pathname });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setupAnalyticsPing();
+      setupDatePickers();
+      setupSearchBar();
+
+      map = L.map('map', {
+        worldCopyJump:true,
+        zoomControl:true,
+        zoomSnap:ZSTEP,
+        zoomDelta:ZSTEP,
+        preferCanvas:true,
+        minZoom:ZMIN,
+        maxZoom:ZMAX
+      }).setView([20,0], ZMIN);
+      map.setMaxBounds([[-85,-200],[85,200]]);
+      map.zoomControl.setPosition('bottomright');
+
+      auth.onAuthStateChanged(async (user) => {
+        if (user) {
+          const doc = await db.collection('users').doc(user.uid).get();
+          userNiches = doc.exists && doc.data().niches ? doc.data().niches : [];
+        } else {
+          userNiches = [];
+        }
+        loadData();
+      });
+
+      $('#countryFilter').addEventListener('change', async e => {
+        selectedCountryFilter = e.target.value;
+        highlightedCountry = selectedCountryFilter || '';
+        await loadMapLayer();
+        if (selectedCountryFilter){
+          presentCountry(selectedCountryFilter);
+        } else {
+          map.closePopup();
+          closeSheet();
+          focusActiveByNiche();
+        }
+        if (USE_SHEET) setDrawer(false);
+      });
+
+      window.addEventListener('resize', ()=>{
+        map.invalidateSize();
+        recheckModeAndReload();
+      });
+    });
+
+    async function loadData(){
+      const res = await fetch('../map_data/region_map.json');
+      regionArticles = await res.json();
+      const np = urlParam('niche'); if (np) selectedNiche = np;
+      populateCountryFilter();
+      populateNicheFilter();
+      await loadMapLayer();
+      focusActiveByNiche();
+    }
+
+    function populateCountryFilter(){
+      const el = $('#countryFilter');
+      el.innerHTML = '<option value="">Visos</option>';
+      Object.keys(regionArticles).sort().forEach(c=>{
+        const o = document.createElement('option'); o.value=c; o.textContent=c; el.appendChild(o);
+      });
+      if (selectedCountryFilter) el.value = selectedCountryFilter;
+    }
+
+    function populateNicheFilter(){
+      const bar = $('#nicheBar');
+      const set = new Set();
+      Object.values(regionArticles).forEach(list=>list.forEach(a=>{ if(a.niche) set.add(a.niche); }));
+      const allowed = userNiches.length ? [...set].filter(n=>userNiches.includes(n)) : [...set];
+      allowed.sort();
+      bar.innerHTML='';
+      ['Visos', ...allowed.filter(n=>n!=='Visos')].forEach(niche=>{
+        const b = document.createElement('button');
+        b.className='chip' + (niche===selectedNiche?' active':'');
+        b.textContent=niche;
+        b.onclick=()=>{
+          selectedNiche=niche;
+          document.querySelectorAll('#nicheBar .chip').forEach(x=>x.classList.remove('active'));
+          b.classList.add('active');
+          loadMapLayer();
+          focusActiveByNiche();
+          if (USE_SHEET) setDrawer(false);
+        };
+        bar.appendChild(b);
+      });
+    }
+
+    function setupSearchBar(){
+      const input = $('#articleSearch');
+      const clear = $('#clearSearch');
+      if (!input) return;
+      const updateClear = () => {
+        if (!clear) return;
+        const hasValue = input.value.trim().length > 0;
+        clear.classList.toggle('is-visible', hasValue);
+      };
+      const applyQuery = () => {
+        searchQuery = input.value.trim().toLowerCase();
+        loadMapLayer();
+        if (USE_SHEET) setDrawer(false);
+        updateClear();
+      };
+      input.addEventListener('input', ()=>{
+        applyQuery();
+      });
+      input.addEventListener('search', applyQuery);
+      if (clear){
+        clear.addEventListener('click', ()=>{
+          if (!input.value) return;
+          input.value='';
+          searchQuery='';
+          loadMapLayer();
+          if (USE_SHEET) setDrawer(false);
+          input.focus();
+          updateClear();
+        });
+      }
+      updateClear();
+    }
+
+    function setupDatePickers(){
+      if (typeof flatpickr !== 'function') return;
+      const changeHandler = (selectedDates, _str, instance) => {
+        if (instance === dateFromPicker){
+          dateToPicker.set('minDate', selectedDates[0] || null);
+        }
+        if (instance === dateToPicker){
+          dateFromPicker.set('maxDate', selectedDates[0] || null);
+        }
+        loadMapLayer();
+        if (USE_SHEET) setDrawer(false);
+      };
+      dateFromPicker = flatpickr('#dateFrom', {
+        dateFormat:'Y-m-d',
+        allowInput:true,
+        onChange:changeHandler,
+        onClose:changeHandler
+      });
+      dateToPicker = flatpickr('#dateTo', {
+        dateFormat:'Y-m-d',
+        allowInput:true,
+        onChange:changeHandler,
+        onClose:changeHandler
+      });
+      $('#dateFrom').addEventListener('change', ()=> changeHandler(dateFromPicker.selectedDates, '', dateFromPicker));
+      $('#dateTo').addEventListener('change', ()=> changeHandler(dateToPicker.selectedDates, '', dateToPicker));
+      document.querySelectorAll('.date-clear').forEach(btn => {
+        btn.addEventListener('click', (ev)=>{
+          ev.preventDefault();
+          ev.stopPropagation();
+          const target = btn.dataset.target;
+          if (target === 'dateFrom'){
+            dateFromPicker.clear();
+            changeHandler([], '', dateFromPicker);
+          } else if (target === 'dateTo'){
+            dateToPicker.clear();
+            changeHandler([], '', dateToPicker);
+          }
+          const input = document.getElementById(target);
+          input?.focus();
+        });
+      });
+    }
+
+    function filterArticles(country){
+      let items = regionArticles[country] || [];
+      if (selectedNiche !== 'Visos') items = items.filter(a=>a.niche===selectedNiche);
+      if (selectedCountryFilter && selectedCountryFilter !== country) return [];
+      if (searchQuery){
+        items = items.filter(a=>{
+          const title = (a.title||'').toLowerCase();
+          const summary = stripHTML(a.summary).toLowerCase();
+          return title.includes(searchQuery) || summary.includes(searchQuery);
+        });
+      }
+      if (activeDateFrom) items = items.filter(a => parseDateInput(a.date) >= activeDateFrom);
+      if (activeDateTo)   items = items.filter(a => parseDateInput(a.date) <= activeDateTo);
+      return items;
+    }
+
+    const countryHasArticles = n => filterArticles(n).length>0;
+    function styleFor(feature){
+      const name = feature.properties.name;
+      const has = countryHasArticles(name);
+      const z = map?.getZoom() || ZMIN;
+      const w = z >= 5 ? 0.9 : z >= 3.5 ? 0.7 : 0.5;
+      const base = has
+        ? { color:'#162031', weight:w, fillColor:'#49c6ff', fillOpacity:0.85 }
+        : { color:'#131b28', weight:w, fillColor:'#1a2431', fillOpacity:0.35 };
+      if (highlightedCountry && name === highlightedCountry){
+        base.weight = w + 0.6;
+        base.fillColor = has ? '#7de2ff' : '#243048';
+        base.fillOpacity = has ? 1 : 0.5;
+      }
+      return base;
+    }
+
+    async function getWorldGeoJSON(){
+      if (worldGeoJSON) return worldGeoJSON;
+      const res = await fetch('../map_data/countries.geo.json');
+      const data = await res.json();
+      data.features = data.features
+        .filter(f => (f.properties?.name || f.properties?.NAME) !== 'Antarctica')
+        .map(f => {
+          const props = f.properties || {};
+          props.name = props.name || props.NAME;
+          f.properties = props;
+          return f;
+        });
+      worldGeoJSON = data;
+      return worldGeoJSON;
+    }
+
+    async function loadMapLayer(){
+      if (!map) return;
+      refreshActiveDates();
+      if (selectedCountryFilter && !regionArticles[selectedCountryFilter]) selectedCountryFilter = '';
+      if (selectedCountryFilter) highlightedCountry = selectedCountryFilter;
+
+      let total=0, active=0, latest=null;
+      Object.keys(regionArticles).forEach(c=>{
+        const list = filterArticles(c);
+        if (list.length){
+          active++;
+          total += list.length;
+          const newest = list.reduce((acc,a)=> (acc > a.date ? acc : a.date), list[0].date);
+          const d = new Date(newest);
+          if (!latest || d > latest) latest = d;
+        }
+      });
+      $('#totalArticles').textContent = `${total} straipsni${total===1?'s':'ų'}`;
+      $('#activeCountries').textContent = `${active} šal${active===1?'is':'ys'}`;
+      $('#lastUpdated').textContent = latest ? `Atnaujinta ${fmt(latest)}` : 'Nerasta straipsnių';
+
+      if (highlightedCountry && !countryHasArticles(highlightedCountry)){
+        highlightedCountry = selectedCountryFilter || '';
+      }
+      if (highlightedCountry && !countryHasArticles(highlightedCountry)){
+        highlightedCountry = '';
+        map.closePopup();
+        closeSheet();
+      }
+
+      const world = await getWorldGeoJSON();
+      countryLayers.clear();
+      countryMarkers.clear();
+      if (geoJsonLayer) geoJsonLayer.remove();
+      if (markerLayer) markerLayer.remove();
+
+      geoJsonLayer = L.geoJSON(world, {
+        style: styleFor,
+        onEachFeature: (feature, layer) => {
+          const country = feature.properties?.name;
+          if (!country) return;
+          countryLayers.set(country, layer);
+          layer.on('click', ()=> presentCountry(country));
+          layer.on({
+            mouseover: () => { if (countryHasArticles(country)) { layer.setStyle({fillOpacity:1}); layer.bringToFront(); } },
+            mouseout: () => refreshCountryStyles()
+          });
+        }
+      }).addTo(map);
+
+      markerLayer = L.layerGroup().addTo(map);
+      geoJsonLayer.eachLayer(layer => {
+        const country = layer.feature?.properties?.name;
+        if (!country) return;
+        const list = filterArticles(country);
+        if (!list.length) return;
+        const center = layer.getBounds().getCenter();
+        const marker = L.circleMarker(center, {
+          radius:6,
+          weight:2,
+          color:'#1c334a',
+          fillColor:'#49c6ff',
+          fillOpacity:0.85
+        });
+        marker.on('click', ()=> presentCountry(country));
+        markerLayer.addLayer(marker);
+        countryMarkers.set(country, marker);
+      });
+
+      refreshCountryStyles();
+      refreshMarkerStyles();
+
+      map.off('zoomend._style').on('zoomend._style', ()=>{
+        refreshCountryStyles();
+        refreshMarkerStyles();
+      });
+
+      if (!USE_SHEET){
+        map.off('popupopen._nn').on('popupopen._nn', (e) => {
+          const el = e.popup.getElement();
+          if (el){
+            L.DomEvent.disableClickPropagation(el);
+            L.DomEvent.disableScrollPropagation(el);
+          }
+        });
+        closeSheet();
+      } else {
+        map.closePopup();
+      }
+    }
+
+    function focusActiveByNiche(){
+      if (!geoJsonLayer) return;
+      const boundsArr=[];
+      geoJsonLayer.eachLayer(l=>{
+        const name = l.feature?.properties?.name;
+        if (name && countryHasArticles(name)) boundsArr.push(l.getBounds());
+      });
+      if (!boundsArr.length) return;
+      const bounds = boundsArr.reduce((acc,b)=>acc.extend(b), boundsArr[0]);
+      map.fitBounds(bounds, { ...PADS, maxZoom: ZMAX - 0.1, animate:true });
+    }
+
+    function popupHTML(country, articles, onlyFirst){
+      const shown = onlyFirst ? articles.slice(0,1) : articles;
+      const actions = [];
+      if (articles.length > 1){
+        if (onlyFirst){
+          actions.push(`<button type="button" class="btn primary js-more" data-country="${country}" onclick="NN_more(event,this)">Rodyti daugiau</button>`);
+        } else {
+          actions.push(`<button type="button" class="btn ghost js-back" data-country="${country}" onclick="NN_back(event,this)">← Grįžti</button>`);
+        }
+      }
+      actions.push(`<button type="button" class="btn ghost js-close-card" onclick="NN_closePopup()">Uždaryti</button>`);
+      return `
+        <div class="popup-card">
+          <div class="popup-header">
+            <div class="popup-flag"><i class="fa-solid fa-location-dot"></i></div>
+            <div class="popup-title">${country}</div>
+            <div class="popup-count">${articles.length} straipsniai</div>
+            <button type="button" class="popup-close" aria-label="Uždaryti kortelę" onclick="NN_closePopup()">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div class="popup-list">
+            ${buildArticlesHTML(shown)}
+          </div>
+          <div class="popup-actions">
+            ${actions.join('')}
+          </div>
+        </div>`;
+    }
+
+    function buildArticlesHTML(list){
+      return list.map(a=>`
+        <div class="article">
+          ${a.image ? `<img class="thumb" src="${a.image}" alt="">` : `<div class="thumb"></div>`}
+          <div class="meta">
+            <div class="title"><a href="${a.url}" target="_blank" rel="noopener">${a.title}</a></div>
+            <div class="row"><span>${fmt(a.date)}</span>${a.niche?`<span class="badge">${a.niche}</span>`:''}</div>
+            ${a.summary ? `<div class="summary">${a.summary}</div>` : ``}
+          </div>
+        </div>`).join("");
+    }
+
+    function renderSheetControls(country, { expanded=false } = {}){
+      if (!sheetActions) return;
+      const total = filterArticles(country).length;
+      const buttons = [];
+      if (total > 1){
+        if (expanded){
+          buttons.push(`<button type="button" class="btn ghost" data-action="back" data-country="${country}">← Grįžti</button>`);
+        } else {
+          buttons.push(`<button type="button" class="btn primary" data-action="more" data-country="${country}">Rodyti daugiau</button>`);
+        }
+      }
+      buttons.push(`<button type="button" class="btn ghost" data-action="close" data-country="${country}">Uždaryti</button>`);
+      sheetActions.innerHTML = buttons.join('');
+    }
+
+    function presentCountry(country, { focus=true } = {}){
+      const layer = countryLayers.get(country);
+      if (!layer) return;
+      const articles = filterArticles(country);
+      highlightedCountry = country;
+      refreshCountryStyles();
+      refreshMarkerStyles();
+
+      if (!articles.length){
+        map.closePopup();
+        closeSheet();
+        return;
+      }
+
+      if (focus){
+        map.flyToBounds(layer.getBounds(), { ...PADS, maxZoom: Math.min(ZMAX, 5.3), animate:true, duration:0.6 });
+      }
+
+      if (USE_SHEET){
+        const first = articles.slice(0,1);
+        openSheet(buildArticlesHTML(first), country, articles.length);
+        renderSheetControls(country, { expanded:false });
+      } else {
+        const popup = L.popup({ maxWidth: 820, minWidth: 380, className: 'nn-popup', closeOnClick:false, autoPanPaddingTopLeft:[28,28], autoPanPaddingBottomRight:[28,84] })
+          .setLatLng(layer.getBounds().getCenter())
+          .setContent(popupHTML(country, articles, true));
+        popup.openOn(map);
+        setTimeout(NN_afterPopupUpdate, 16);
+      }
+    }
+
+    function NN_afterPopupUpdate(){
+      const p = map && map._popup;
+      if (!p) return;
+      p.update();
+      setTimeout(()=>p.update(), 0);
+      const el = p.getElement();
+      if (el){
+        const list = el.querySelector('.popup-list');
+        if (list) list.scrollTop = 0;
+      }
+    }
+    function NN_more(ev, el){
+      if (ev){ ev.preventDefault(); ev.stopPropagation(); }
+      const c = el?.dataset?.country;
+      const p = map && map._popup;
+      if (!p || !c) return;
+      const all = filterArticles(c);
+      p.setContent(popupHTML(c, all, false));
+      NN_afterPopupUpdate();
+      refreshMarkerStyles();
+    }
+    function NN_back(ev, el){
+      if (ev){ ev.preventDefault(); ev.stopPropagation(); }
+      const c = el?.dataset?.country;
+      const p = map && map._popup;
+      if (!p || !c) return;
+      p.setContent(popupHTML(c, filterArticles(c), true));
+      NN_afterPopupUpdate();
+      refreshMarkerStyles();
+    }
+    window.NN_more = NN_more;
+    window.NN_back = NN_back;
+
+    sheetActions.addEventListener('click', (ev)=>{
+      const btn = ev.target.closest('button');
+      if(!btn) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      const action = btn.dataset.action;
+      const country = btn.dataset.country;
+
+      if (action==='more'){
+        const all = filterArticles(country);
+        sheetBody.innerHTML = buildArticlesHTML(all);
+        renderSheetControls(country, { expanded:true });
+        sheetBody.scrollTop = 0;
+      } else if (action==='back'){
+        const first = filterArticles(country).slice(0,1);
+        sheetBody.innerHTML = buildArticlesHTML(first);
+        renderSheetControls(country, { expanded:false });
+        sheetBody.scrollTop = 0;
+      } else if (action==='close'){
+        NN_closePopup();
+      }
+    }, true);
+  </script>
+  <script type="text/javascript">
+    var infolinks_pid = 3440742;
+    var infolinks_wsid = 0;
+  </script>
+  <script type="text/javascript" src="//resources.infolinks.com/js/infolinks_main.js"></script>
+</body>
+</html>
